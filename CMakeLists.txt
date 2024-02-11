@@ -78,7 +78,7 @@ set(ARQ_SRC
         src/arqanore/quaternion.cpp)
 
 # Generate variables for the compiler and linker
-set(ARQ_LIBRARIES glfw freetype soloudw reactphysics3d -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
+set(ARQ_LIBRARIES glfw freetype soloudw reactphysics3d dl -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 
 # Override variables for oparting systems other than Linux
 if (WIN32)
