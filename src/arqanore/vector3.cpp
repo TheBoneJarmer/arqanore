@@ -1,3 +1,4 @@
+#include <iostream>
 #include "arqanore/vector3.h"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/vector_angle.hpp"
@@ -68,42 +69,138 @@ arqanore::Vector3 arqanore::Vector3::lerp(arqanore::Vector3 v1, arqanore::Vector
     return arqanore::Vector3(lerp.x, lerp.y, lerp.z);
 }
 
-arqanore::Vector3 arqanore::Vector3::operator+(const arqanore::Vector3 &v) const {
-    return arqanore::Vector3(x + v.x, y + v.y, z + v.z);
+arqanore::Vector3& arqanore::Vector3::operator+(arqanore::Vector3 &v) {
+    x += v.x;
+    y += v.y;
+    z += v.z;
+    
+    return *this;
 }
 
-arqanore::Vector3 arqanore::Vector3::operator+(const float f) const {
-    return arqanore::Vector3(x + f, y + f, z + f);
+arqanore::Vector3& arqanore::Vector3::operator+(float f) {
+    x += f;
+    y += f;
+    z += f;
+    
+    return *this;
 }
 
-arqanore::Vector3 arqanore::Vector3::operator-(const arqanore::Vector3 &v) const {
-    return arqanore::Vector3(x - v.x, y - v.y, z - v.z);
+arqanore::Vector3& arqanore::Vector3::operator-(arqanore::Vector3 &v) {
+    x -= v.x;
+    y -= v.y;
+    z -= v.z;
+    
+    return *this;
 }
 
-arqanore::Vector3 arqanore::Vector3::operator-(const float f) const {
-    return arqanore::Vector3(x - f, y - f, z - f);
+arqanore::Vector3& arqanore::Vector3::operator-(float f) {
+    x -= f;
+    y -= f;
+    z -= f;
+    
+    return *this;
 }
 
-arqanore::Vector3 arqanore::Vector3::operator*(const arqanore::Vector3 &v) const {
-    return arqanore::Vector3(x * v.x, y * v.y, z * v.z);
+arqanore::Vector3& arqanore::Vector3::operator*(arqanore::Vector3 &v) {
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
+    
+    return *this;
 }
 
-arqanore::Vector3 arqanore::Vector3::operator*(const float f) const {
-    return arqanore::Vector3(x * f, y * f, z * f);
+arqanore::Vector3& arqanore::Vector3::operator*(float f) {
+    x *= f;
+    y *= f;
+    z *= f;
+    
+    return *this;
 }
 
-arqanore::Vector3 arqanore::Vector3::operator/(const arqanore::Vector3 &v) const {
-    return arqanore::Vector3(x / v.x, y / v.y, z / v.z);
+arqanore::Vector3& arqanore::Vector3::operator/(arqanore::Vector3 &v) {
+    x /= v.x;
+    y /= v.y;
+    z /= v.z;
+    
+    return *this;
 }
 
-arqanore::Vector3 arqanore::Vector3::operator/(const float f) const {
-    return arqanore::Vector3(x / f, y / f, z / f);
+arqanore::Vector3& arqanore::Vector3::operator/(float f) {
+    x /= f;
+    y /= f;
+    z /= f;
+    
+    return *this;
 }
 
-bool arqanore::Vector3::operator==(const arqanore::Vector3 &v) const {
+arqanore::Vector3& arqanore::Vector3::operator+=(Vector3 &v) {
+    x += v.x;
+    y += v.y;
+    z += v.z;
+    
+    return *this;
+}
+
+arqanore::Vector3& arqanore::Vector3::operator+=(const float f) {
+    x += f;
+    y += f;
+    z += f;
+    
+    return *this;
+}
+
+arqanore::Vector3& arqanore::Vector3::operator-=(Vector3 &v) {
+    x -= v.x;
+    y -= v.y;
+    z -= v.z;
+    
+    return *this;
+}
+
+arqanore::Vector3& arqanore::Vector3::operator-=(float f) {
+    x -= f;
+    y -= f;
+    z -= f;
+    
+    return *this;
+}
+
+arqanore::Vector3& arqanore::Vector3::operator++() {
+    x++;
+    y++;
+    z++;
+    
+    return *this;
+}
+
+arqanore::Vector3& arqanore::Vector3::operator++(int i) {
+    x++;
+    y++;
+    z++;
+        
+    return *this;
+}
+
+arqanore::Vector3& arqanore::Vector3::operator--() {
+    x--;
+    y--;
+    z--;
+    
+    return *this;
+}
+
+arqanore::Vector3& arqanore::Vector3::operator--(int i) {
+    x--;
+    y--;
+    z--;
+    
+    return *this;
+}
+
+bool arqanore::Vector3::operator==(arqanore::Vector3 &v) {
     return x == v.x && y == v.y && z == v.z;
 }
 
-bool arqanore::Vector3::operator!=(const arqanore::Vector3 &v) const {
+bool arqanore::Vector3::operator!=(arqanore::Vector3 &v) {
     return !(v == *this);
 }

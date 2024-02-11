@@ -16,6 +16,9 @@ bl_info = {
     "category": "Import-Export"
 }
 
+major = bl_info["version"][0]
+minor = bl_info["version"][1]
+patch = bl_info["version"][2]
 
 class Face:
     vi = []
@@ -61,6 +64,10 @@ class ArqanoreModelParser:
         objects = scene.objects
         str_arqm = ""
         
+        # Add metadata to begin of file
+        str_arqm += f"VERSION {major}.{minor}.{patch}\n\n"
+        
+        # Generate rotation matrix to transform vertices
         m = mathutils.Matrix.Rotation(math.radians(90.0), 4, 'X')
         mi = m.inverted()  
 
