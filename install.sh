@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cp build/*.so /usr/local/lib/
-cp -r include/* /usr/local/include/
+cp -a build/*.so* /usr/local/lib/
+cp -a include/* /usr/local/include/

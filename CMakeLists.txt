@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
-project(arqanore VERSION 1.0.0 DESCRIPTION "Arqanore is a 2D OpenGL game library")
+
+file(STRINGS "VERSION" ARQ_VERSION)
+project(arqanore VERSION ${ARQ_VERSION} DESCRIPTION "Arqanore is a 2D and 3D OpenGL game library")
+add_compile_definitions(VERSION="${ARQ_VERSION}")
 
 set(CMAKE_CXX_STANDARD 23)
-
-# Generate variables for all sources
 set(ARQ_INCLUDE
+        include/arqanore/arqanore.h
         include/arqanore/audio.h
         include/arqanore/color.h
         include/arqanore/exceptions.h
@@ -38,9 +40,9 @@ set(ARQ_INCLUDE
         include/arqanore/physics.h
         include/arqanore/rigidbody.h
         include/arqanore/quaternion.h)
-
 set(ARQ_SRC
         src/arqanore/glad/gl.c
+        src/arqanore/arqanore.cpp
         src/arqanore/window.cpp
         src/arqanore/exceptions.cpp
         src/arqanore/utils.cpp
@@ -76,7 +78,7 @@ set(ARQ_SRC
         src/arqanore/quaternion.cpp)
 
 # Generate variables for the compiler and linker
-set(ARQ_LIBRARIES glfw freetype soloudw reactphysics3d dl -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
+set(ARQ_LIBRARIES glfw freetype soloudw reactphysics3d -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 
 # Override variables for oparting systems other than Linux
 if (WIN32)
@@ -90,8 +92,8 @@ endif (WIN32)
 add_library(arqanore ${ARQ_INCLUDE} ${ARQ_SRC})
 target_include_directories(arqanore PUBLIC include/)
 target_link_libraries(arqanore PUBLIC ${ARQ_LIBRARIES})
-set_target_properties(arqanore PROPERTIES PUBLIC_HEADER include/arqanore/arqanore.h)
 set_target_properties(arqanore PROPERTIES OUTPUT_NAME "arqanore")
+set_target_properties(arqanore PROPERTIES VERSION ${ARQ_VERSION})
 
 # Configure arqanore examples
 add_executable(example_window ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/window/main.cpp)
@@ -118,3 +120,4 @@ add_executable(example_models ${ARQ_INCLUDE} ${ARQ_SRC}
         src/examples/models/floor.h)
 target_include_directories(example_models PUBLIC include/)
 target_link_libraries(example_models PRIVATE ${ARQ_LIBRARIES})
+
