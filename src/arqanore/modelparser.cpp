@@ -1,3 +1,5 @@
+#include <string>
+#include "arqanore/arqanore.h"
 #include "arqanore/modelparser.h"
 #include "arqanore/utils.h"
 #include "arqanore/exceptions.h"
@@ -73,7 +75,27 @@ void arqanore::ModelParser::parse_line(std::string &key, std::string &value, arq
 }
 
 void arqanore::ModelParser::parse_version(std::string& value) {
+    std::vector<std::string> values = string_split(value, '.');
+    int major = std::stoi(values[0]);
+    int minor = std::stoi(values[1]);
+    int patch = std::stoi(values[2]);
+    bool mismatch = false;
     
+    if (arqanore::Arqanore::get_version_major() != major) {
+        mismatch = true;
+    }
+    
+    if (arqanore::Arqanore::get_version_minor() != minor) {
+        mismatch = true;
+    }
+    
+    if (arqanore::Arqanore::get_version_patch() != patch) {
+        mismatch = true;
+    }
+    
+    if (mismatch) {
+        throw arqanore::ArqanoreException("Model version mismatch");
+    }
 }
 
 void arqanore::ModelParser::parse_mesh(std::string &key, std::string &value, arqanore::Mesh *mesh) {
