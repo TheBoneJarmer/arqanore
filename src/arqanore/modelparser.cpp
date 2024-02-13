@@ -37,6 +37,10 @@ arqanore::Color arqanore::ModelParser::parse_color(std::string &value) {
 }
 
 void arqanore::ModelParser::parse_line(std::string &key, std::string &value, arqanore::Mesh *&mesh, arqanore::Material *&material, std::string &path) {
+    if (key == "VERSION") {
+        parse_version(value);    
+    }
+
     if (mesh == nullptr && key == "BEGIN_MESH") {
         mesh = new Mesh(value);
     }
@@ -66,6 +70,10 @@ void arqanore::ModelParser::parse_line(std::string &key, std::string &value, arq
     if (material != nullptr) {
         parse_material(key, value, material, path);
     }
+}
+
+void arqanore::ModelParser::parse_version(std::string& value) {
+    
 }
 
 void arqanore::ModelParser::parse_mesh(std::string &key, std::string &value, arqanore::Mesh *mesh) {

@@ -1,5 +1,5 @@
 #include <cmath>
-#include "arqanore/vector2.h"
+#include <arqanore/vector2.h>
 #include "glm/vec2.hpp"
 #include "glm/gtx/exterior_product.hpp"
 #include "glm/geometric.hpp"
