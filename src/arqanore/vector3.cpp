@@ -141,7 +141,7 @@ arqanore::Vector3& arqanore::Vector3::operator+=(Vector3 &v) {
     return *this;
 }
 
-arqanore::Vector3& arqanore::Vector3::operator+=(const float f) {
+arqanore::Vector3& arqanore::Vector3::operator+=(float f) {
     x += f;
     y += f;
     z += f;
