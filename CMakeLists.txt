@@ -80,17 +80,19 @@ set(ARQ_SRC
 # Generate variables for the compiler and linker
 set(ARQ_LIBRARIES glfw freetype soloudw reactphysics3d dl -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 
-# Override variables for oparting systems other than Linux
 if (WIN32)
-    include_directories("C:/Include")
-    link_directories("C:/Lib")
-
     set(ARQ_LIBRARIES glfw3 freetype soloudw reactphysics3d -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 endif (WIN32)
 
 # Configure arqanore
 add_library(arqanore ${ARQ_INCLUDE} ${ARQ_SRC})
 target_include_directories(arqanore PUBLIC include/)
+
+if (WIN32)
+    target_include_directories(arqanore PUBLIC "C:/Include")
+    target_link_directories(arqanore PUBLIC "C:/Lib")
+endif (WIN32)
+
 target_link_libraries(arqanore PUBLIC ${ARQ_LIBRARIES})
 set_target_properties(arqanore PROPERTIES OUTPUT_NAME "arqanore")
 set_target_properties(arqanore PROPERTIES VERSION ${ARQ_VERSION})
