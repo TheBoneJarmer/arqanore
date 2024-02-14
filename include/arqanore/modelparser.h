@@ -11,6 +11,7 @@ namespace arqanore {
     struct ModelParserResult {
         std::vector<Material> materials;
         std::vector<Mesh> meshes;
+        std::array<int, 3> version;
     };
 
     class ModelParser {
@@ -20,6 +21,7 @@ namespace arqanore {
         std::vector<Vector2> texcoords;
         std::vector<Material> materials;
         std::vector<Mesh> meshes;
+        std::array<int, 3> version;
 
         Vector3 parse_vector3(std::string &value);
 
@@ -28,6 +30,8 @@ namespace arqanore {
         Color parse_color(std::string &value);
 
         void parse_line(std::string &key, std::string &value, Mesh *&mesh, Material *&material, std::string &path);
+        
+        void parse_version(std::string& value);
 
         void parse_mesh(std::string &key, std::string &value, Mesh *mesh);
 

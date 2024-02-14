@@ -1,3 +1,5 @@
+#include <string>
+#include "arqanore/arqanore.h"
 #include "arqanore/modelparser.h"
 #include "arqanore/utils.h"
 #include "arqanore/exceptions.h"
@@ -37,6 +39,10 @@ arqanore::Color arqanore::ModelParser::parse_color(std::string &value) {
 }
 
 void arqanore::ModelParser::parse_line(std::string &key, std::string &value, arqanore::Mesh *&mesh, arqanore::Material *&material, std::string &path) {
+    if (key == "VERSION") {
+        parse_version(value);    
+    }
+
     if (mesh == nullptr && key == "BEGIN_MESH") {
         mesh = new Mesh(value);
     }
@@ -66,6 +72,14 @@ void arqanore::ModelParser::parse_line(std::string &key, std::string &value, arq
     if (material != nullptr) {
         parse_material(key, value, material, path);
     }
+}
+
+void arqanore::ModelParser::parse_version(std::string& value) {    
+    std::vector<std::string> values = string_split(value, '.');
+    
+    this->version[0] = std::stoi(values[0]);
+    this->version[1] = std::stoi(values[1]);
+    this->version[2] = std::stoi(values[2]);
 }
 
 void arqanore::ModelParser::parse_mesh(std::string &key, std::string &value, arqanore::Mesh *mesh) {
@@ -259,6 +273,7 @@ arqanore::ModelParserResult arqanore::ModelParser::parse(std::string &path) {
 
     return {
             this->materials,
-            this->meshes
+            this->meshes,
+            this->version
     };
 }

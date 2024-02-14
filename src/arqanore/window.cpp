@@ -159,13 +159,6 @@ arqanore::Color arqanore::Window::get_clear_color() {
     return this->clear_color;
 }
 
-std::string arqanore::Window::get_version() {
-    auto value = glGetString(GL_VERSION);
-    auto result = std::string((const char *) value);
-
-    return result;
-}
-
 double arqanore::Window::get_fps() {
     return fps;
 }
