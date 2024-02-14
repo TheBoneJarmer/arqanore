@@ -11,27 +11,12 @@ std::string arqanore::Arqanore::get_opengl_version() {
     return result;
 }
 
-std::string arqanore::Arqanore::get_version() {
-    return std::string(VERSION);
-}
-
-unsigned int arqanore::Arqanore::get_version_major() {
+std::array<int, 3> arqanore::Arqanore::get_version() {
     std::vector<std::string> values = string_split(VERSION, '.');
-    unsigned int value = std::stoi(values[0]);
+    std::array<int, 3> result;
+    result[0] = std::stoi(values[0]);
+    result[1] = std::stoi(values[1]);
+    result[2] = std::stoi(values[2]);
     
-    return value;
-}
-
-unsigned int arqanore::Arqanore::get_version_minor() {
-    std::vector<std::string> values = string_split(VERSION, '.');
-    unsigned int value = std::stoi(values[1]);
-    
-    return value;
-}
-
-unsigned int arqanore::Arqanore::get_version_patch() {
-    std::vector<std::string> values = string_split(VERSION, '.');
-    unsigned int value = std::stoi(values[2]);
-    
-    return value;
+    return result;
 }

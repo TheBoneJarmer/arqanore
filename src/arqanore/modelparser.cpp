@@ -74,28 +74,12 @@ void arqanore::ModelParser::parse_line(std::string &key, std::string &value, arq
     }
 }
 
-void arqanore::ModelParser::parse_version(std::string& value) {
+void arqanore::ModelParser::parse_version(std::string& value) {    
     std::vector<std::string> values = string_split(value, '.');
-    int major = std::stoi(values[0]);
-    int minor = std::stoi(values[1]);
-    int patch = std::stoi(values[2]);
-    bool mismatch = false;
     
-    if (arqanore::Arqanore::get_version_major() != major) {
-        mismatch = true;
-    }
-    
-    if (arqanore::Arqanore::get_version_minor() != minor) {
-        mismatch = true;
-    }
-    
-    if (arqanore::Arqanore::get_version_patch() != patch) {
-        mismatch = true;
-    }
-    
-    if (mismatch) {
-        throw arqanore::ArqanoreException("Model version mismatch");
-    }
+    this->version[0] = std::stoi(values[0]);
+    this->version[1] = std::stoi(values[1]);
+    this->version[2] = std::stoi(values[2]);
 }
 
 void arqanore::ModelParser::parse_mesh(std::string &key, std::string &value, arqanore::Mesh *mesh) {
@@ -289,6 +273,7 @@ arqanore::ModelParserResult arqanore::ModelParser::parse(std::string &path) {
 
     return {
             this->materials,
-            this->meshes
+            this->meshes,
+            this->version
     };
 }
