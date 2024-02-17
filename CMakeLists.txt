@@ -84,32 +84,25 @@ if (WIN32)
     set(ARQ_LIBRARIES glfw3 freetype soloudw reactphysics3d -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 endif (WIN32)
 
-# Configure arqanore
-add_library(arqanore ${ARQ_INCLUDE} ${ARQ_SRC})
-target_include_directories(arqanore PUBLIC include/)
+# Configure include and link
+include_directories(include/)
 
 if (WIN32)
-    target_include_directories(arqanore PUBLIC "C:/Include")
-    target_link_directories(arqanore PUBLIC "C:/Lib")
+    include_directories(arqanore PUBLIC "C:/Include")
+    link_directories(arqanore PUBLIC "C:/Lib")
 endif (WIN32)
 
-target_link_libraries(arqanore PUBLIC ${ARQ_LIBRARIES})
+link_libraries(${ARQ_LIBRARIES})
+
+# Configure arqanore
+add_library(arqanore ${ARQ_INCLUDE} ${ARQ_SRC})
 set_target_properties(arqanore PROPERTIES OUTPUT_NAME "arqanore")
 set_target_properties(arqanore PROPERTIES VERSION ${ARQ_VERSION})
 
 # Configure arqanore examples
 add_executable(example_window ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/window/main.cpp)
-target_include_directories(example_window PUBLIC include/)
-target_link_libraries(example_window PRIVATE ${ARQ_LIBRARIES})
-
 add_executable(example_sprites ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/sprites/main.cpp)
-target_include_directories(example_sprites PUBLIC include/)
-target_link_libraries(example_sprites PRIVATE ${ARQ_LIBRARIES})
-
 add_executable(example_fonts ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/fonts/main.cpp)
-target_include_directories(example_fonts PUBLIC include/)
-target_link_libraries(example_fonts PRIVATE ${ARQ_LIBRARIES})
-
 add_executable(example_models ${ARQ_INCLUDE} ${ARQ_SRC}
         src/examples/models/main.cpp
         src/examples/models/game_assets.cpp
@@ -120,6 +113,3 @@ add_executable(example_models ${ARQ_INCLUDE} ${ARQ_SRC}
         src/examples/models/game_scene.h
         src/examples/models/floor.cpp
         src/examples/models/floor.h)
-target_include_directories(example_models PUBLIC include/)
-target_link_libraries(example_models PRIVATE ${ARQ_LIBRARIES})
-
