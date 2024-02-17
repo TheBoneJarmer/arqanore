@@ -8,6 +8,7 @@ void arqanore::Model::generate_meshes(std::string &path) {
     ModelParserResult result = parser.parse(path);
 
     this->meshes = result.meshes;
+    this->version = result.version;
 
     for (Mesh &mesh: this->meshes) {
         generate_buffers(mesh);

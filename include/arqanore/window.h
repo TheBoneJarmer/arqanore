@@ -83,8 +83,6 @@ namespace arqanore {
 
         Color get_clear_color();
 
-        std::string get_version();
-
         double get_fps();
 
         void set_width(int value);

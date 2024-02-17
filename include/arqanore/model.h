@@ -11,6 +11,8 @@ namespace arqanore {
 
     public:
         std::vector<Mesh> meshes;
+        
+        std::array<int, 3> version;
 
         Model();
 

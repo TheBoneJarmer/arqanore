@@ -64,42 +64,122 @@ arqanore::Vector2 arqanore::Vector2::lerp(arqanore::Vector2 v1, arqanore::Vector
     return arqanore::Vector2(lerp.x, lerp.y);
 }
 
-arqanore::Vector2 arqanore::Vector2::operator+(const arqanore::Vector2 &v) const {
-    return arqanore::Vector2(x + v.x, y + v.y);
+arqanore::Vector2& arqanore::Vector2::operator+(arqanore::Vector2 &v) {
+    x += v.x;
+    y += v.y;
+    
+    return *this;
 }
 
-arqanore::Vector2 arqanore::Vector2::operator+(const float f) const {
-    return arqanore::Vector2(x + f, y + f);
+arqanore::Vector2& arqanore::Vector2::operator+(float f) {
+    x += f;
+    y += f;
+    
+    return *this;
 }
 
-arqanore::Vector2 arqanore::Vector2::operator-(const arqanore::Vector2 &v) const {
-    return arqanore::Vector2(x - v.x, y - v.y);
+arqanore::Vector2& arqanore::Vector2::operator-(arqanore::Vector2 &v) {
+    x -= v.x;
+    y -= v.y;
+    
+    return *this;
 }
 
-arqanore::Vector2 arqanore::Vector2::operator-(const float f) const {
-    return arqanore::Vector2(x - f, y - f);
+arqanore::Vector2& arqanore::Vector2::operator-(float f) {
+    x -= f;
+    y -= f;
+    
+    return *this;
 }
 
-arqanore::Vector2 arqanore::Vector2::operator*(const arqanore::Vector2 &v) const {
-    return arqanore::Vector2(x * v.x, y * v.y);
+arqanore::Vector2& arqanore::Vector2::operator*(arqanore::Vector2 &v) {
+    x *= v.x;
+    y *= v.y;
+    
+    return *this;
 }
 
-arqanore::Vector2 arqanore::Vector2::operator*(const float f) const {
-    return arqanore::Vector2(x * f, y * f);
+arqanore::Vector2& arqanore::Vector2::operator*(float f) {
+    x *= f;
+    y *= f;
+    
+    return *this;
 }
 
-arqanore::Vector2 arqanore::Vector2::operator/(const arqanore::Vector2 &v) const {
-    return arqanore::Vector2(x / v.x, y / v.y);
+arqanore::Vector2& arqanore::Vector2::operator/(arqanore::Vector2 &v) {
+    x /= v.x;
+    y /= v.y;
+    
+    return *this;
 }
 
-arqanore::Vector2 arqanore::Vector2::operator/(const float f) const {
-    return arqanore::Vector2(x / f, y / f);
+arqanore::Vector2& arqanore::Vector2::operator/(float f) {
+    x /= f;
+    y /= f;
+    
+    return *this;
 }
 
-bool arqanore::Vector2::operator==(const arqanore::Vector2 &v) const {
+arqanore::Vector2& arqanore::Vector2::operator+=(Vector2 &v) {
+    x += v.x;
+    y += v.y;
+    
+    return *this;
+}
+
+arqanore::Vector2& arqanore::Vector2::operator+=(float f) {
+    x += f;
+    y += f;
+    
+    return *this;
+}
+
+arqanore::Vector2& arqanore::Vector2::operator-=(Vector2 &v) {
+    x -= v.x;
+    y -= v.y;
+    
+    return *this;
+}
+
+arqanore::Vector2& arqanore::Vector2::operator-=(float f) {
+    x -= f;
+    y -= f;
+    
+    return *this;
+}
+
+arqanore::Vector2& arqanore::Vector2::operator++() {
+    x++;
+    y++;
+    
+    return *this;
+}
+
+arqanore::Vector2& arqanore::Vector2::operator++(int i) {
+    x++;
+    y++;
+        
+    return *this;
+}
+
+arqanore::Vector2& arqanore::Vector2::operator--() {
+    x--;
+    y--;
+    
+    return *this;
+}
+
+arqanore::Vector2& arqanore::Vector2::operator--(int i) {
+    x--;
+    y--;
+    
+    return *this;
+}
+
+bool arqanore::Vector2::operator==(arqanore::Vector2 &v) {
     return x == v.x && y == v.y;
 }
 
-bool arqanore::Vector2::operator!=(const arqanore::Vector2 &v) const {
+bool arqanore::Vector2::operator!=(arqanore::Vector2 &v) {
     return !(v == *this);
 }
