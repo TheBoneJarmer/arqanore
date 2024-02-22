@@ -32,37 +32,45 @@ namespace arqanore {
 
         static Vector3 lerp(Vector3 v1, Vector3 v2, float by);
 
-        Vector3& operator+(Vector3 &v);
+        Vector3 &operator+(Vector3 &v);
 
-        Vector3& operator+(float f);
+        Vector3 &operator+(float f);
 
-        Vector3& operator-(Vector3 &v);
+        Vector3 &operator-(Vector3 &v);
 
-        Vector3& operator-(float f);
+        Vector3 &operator-(float f);
 
-        Vector3& operator*(Vector3 &v);
+        Vector3 &operator*(Vector3 &v);
 
-        Vector3& operator*(float f);
+        Vector3 &operator*(float f);
 
-        Vector3& operator/(Vector3 &v);
+        Vector3 &operator/(Vector3 &v);
 
-        Vector3& operator/(float f);
-        
-        Vector3& operator+=(Vector3& v);
-        
-        Vector3& operator+=(float f);
-        
-        Vector3& operator-=(Vector3& v);
-        
-        Vector3& operator-=(float f);
-        
-        Vector3& operator++();
-        
-        Vector3& operator++(int i);
-        
-        Vector3& operator--();
-        
-        Vector3& operator--(int i);
+        Vector3 &operator/(float f);
+
+        Vector3 &operator+=(Vector3 &v);
+
+        Vector3 &operator+=(float f);
+
+        Vector3 &operator-=(Vector3 &v);
+
+        Vector3 &operator-=(float f);
+
+        Vector3 &operator*=(Vector3 &v);
+
+        Vector3 &operator*=(float f);
+
+        Vector3 &operator/=(Vector3 &v);
+
+        Vector3 &operator/=(float f);
+
+        Vector3 &operator++();
+
+        Vector3 &operator++(int i);
+
+        Vector3 &operator--();
+
+        Vector3 &operator--(int i);
 
         bool operator==(Vector3 &v);
 

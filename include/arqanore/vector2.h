@@ -25,37 +25,45 @@ namespace arqanore {
 
         static Vector2 lerp(arqanore::Vector2 v1, arqanore::Vector2 v2, float by);
 
-        Vector2& operator+(Vector2 &v);
+        Vector2 &operator+(Vector2 &v);
 
-        Vector2& operator+(float f);
+        Vector2 &operator+(float f);
 
-        Vector2& operator-(Vector2 &v);
+        Vector2 &operator-(Vector2 &v);
 
-        Vector2& operator-(float f);
+        Vector2 &operator-(float f);
 
-        Vector2& operator*(Vector2 &v);
+        Vector2 &operator*(Vector2 &v);
 
-        Vector2& operator*(float f);
+        Vector2 &operator*(float f);
 
-        Vector2& operator/(Vector2 &v);
+        Vector2 &operator/(Vector2 &v);
 
-        Vector2& operator/(float f);
-        
-        Vector2& operator+=(Vector2& v);
-        
-        Vector2& operator+=(float f);
-        
-        Vector2& operator-=(Vector2& v);
-        
-        Vector2& operator-=(float f);
-        
-        Vector2& operator++();
-        
-        Vector2& operator++(int i);
-        
-        Vector2& operator--();
-        
-        Vector2& operator--(int i);
+        Vector2 &operator/(float f);
+
+        Vector2 &operator+=(Vector2 &v);
+
+        Vector2 &operator+=(float f);
+
+        Vector2 &operator-=(Vector2 &v);
+
+        Vector2 &operator-=(float f);
+
+        Vector2 &operator*=(Vector2 &v);
+
+        Vector2 &operator*=(float f);
+
+        Vector2 &operator/=(Vector2 &v);
+
+        Vector2 &operator/=(float f);
+
+        Vector2 &operator++();
+
+        Vector2 &operator++(int i);
+
+        Vector2 &operator--();
+
+        Vector2 &operator--(int i);
 
         bool operator==(Vector2 &v);
 

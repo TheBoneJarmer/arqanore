@@ -165,6 +165,38 @@ arqanore::Vector3& arqanore::Vector3::operator-=(float f) {
     return *this;
 }
 
+arqanore::Vector3 &arqanore::Vector3::operator*=(arqanore::Vector3 &v) {
+    x *= v.x;
+    y *= v.y;
+    z *= v.z;
+
+    return *this;
+}
+
+arqanore::Vector3 &arqanore::Vector3::operator*=(float f) {
+    x *= f;
+    y *= f;
+    z *= f;
+
+    return *this;
+}
+
+arqanore::Vector3 &arqanore::Vector3::operator/=(arqanore::Vector3 &v) {
+    x /= v.x;
+    y /= v.y;
+    z /= v.z;
+
+    return *this;
+}
+
+arqanore::Vector3 &arqanore::Vector3::operator/=(float f) {
+    x /= f;
+    y /= f;
+    z /= f;
+
+    return *this;
+}
+
 arqanore::Vector3& arqanore::Vector3::operator++() {
     x++;
     y++;
