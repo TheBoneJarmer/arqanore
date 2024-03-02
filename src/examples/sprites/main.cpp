@@ -3,6 +3,7 @@
 #include "arqanore/keyboard.h"
 #include "arqanore/sprite.h"
 #include "arqanore/renderer.h"
+#include "arqanore/exceptions.h"
 
 arqanore::Sprite *sprite;
 arqanore::Vector2 position;
@@ -13,13 +14,18 @@ int frame_vert;
 int frame_time;
 
 void on_open(arqanore::Window *window) {
-    sprite = new arqanore::Sprite("assets/sprites/cavern.png", 16, 16);
+    try {
+        sprite = new arqanore::Sprite("assets/sprites/cavern.png", 16, 16);
 
-    position = arqanore::Vector2(64, 64);
-    scale = arqanore::Vector2(16, 16);
+        position = arqanore::Vector2(64, 64);
+        scale = arqanore::Vector2(16, 16);
 
-    frame_hor = 0;
-    frame_time = 0;
+        frame_hor = 0;
+        frame_time = 0;
+    } catch (arqanore::ArqanoreException &ex) {
+        std::cerr << ex.what() << std::endl;
+        window->close();
+    }
 }
 
 void on_close(arqanore::Window *window) {
@@ -49,7 +55,12 @@ void on_update(arqanore::Window *window, double at) {
 }
 
 void on_render_2d(arqanore::Window *window) {
-    arqanore::Renderer::render_sprite(window, sprite, position, scale, arqanore::Vector2::ZERO, 0, frame_hor, frame_vert, false, false, arqanore::Color::WHITE);
+    try {
+        arqanore::Renderer::render_sprite(window, sprite, position, scale, arqanore::Vector2::ZERO, 0, frame_hor, frame_vert, false, false, arqanore::Color::WHITE);
+    } catch (arqanore::ArqanoreException &ex) {
+        std::cerr << ex.what() << std::endl;
+        window->close();
+    }
 }
 
 void on_opengl(arqanore::Window *window, std::string type, std::string severity, std::string message) {

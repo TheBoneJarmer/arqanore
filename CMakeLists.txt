@@ -35,10 +35,6 @@ set(ARQ_INCLUDE
         include/arqanore/light.h
         include/arqanore/camera.h
         include/arqanore/scene.h
-        include/arqanore/collider.h
-        include/arqanore/collisionbody.h
-        include/arqanore/physics.h
-        include/arqanore/rigidbody.h
         include/arqanore/quaternion.h)
 set(ARQ_SRC
         src/arqanore/glad/gl.c
@@ -71,17 +67,13 @@ set(ARQ_SRC
         src/arqanore/modelparser.cpp
         src/arqanore/vector3.cpp
         src/arqanore/scene.cpp
-        src/arqanore/collider.cpp
-        src/arqanore/collisionbody.cpp
-        src/arqanore/rigidbody.cpp
-        src/arqanore/physics.cpp
         src/arqanore/quaternion.cpp)
 
 # Generate variables for the compiler and linker
-set(ARQ_LIBRARIES glfw freetype soloudw reactphysics3d dl -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
+set(ARQ_LIBRARIES glfw freetype soloudw dl -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 
 if (WIN32)
-    set(ARQ_LIBRARIES glfw3 freetype soloudw reactphysics3d -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
+    set(ARQ_LIBRARIES glfw3 freetype soloudw -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 endif (WIN32)
 
 # Configure include and link
@@ -103,13 +95,3 @@ set_target_properties(arqanore PROPERTIES VERSION ${ARQ_VERSION})
 add_executable(example_window ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/window/main.cpp)
 add_executable(example_sprites ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/sprites/main.cpp)
 add_executable(example_fonts ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/fonts/main.cpp)
-add_executable(example_models ${ARQ_INCLUDE} ${ARQ_SRC}
-        src/examples/models/main.cpp
-        src/examples/models/game_assets.cpp
-        src/examples/models/game_assets.h
-        src/examples/models/tit.cpp
-        src/examples/models/tit.h
-        src/examples/models/game_scene.cpp
-        src/examples/models/game_scene.h
-        src/examples/models/floor.cpp
-        src/examples/models/floor.h)

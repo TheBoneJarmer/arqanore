@@ -7,7 +7,6 @@
 #include "arqanore/exceptions.h"
 #include "arqanore/shaders.h"
 #include "arqanore/renderer.h"
-#include "arqanore/physics.h"
 #include "arqanore/scene.h"
 
 void arqanore::Window::opengl_debug_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char *message, const void *user_param) {
@@ -278,8 +277,6 @@ void arqanore::Window::init(bool fullscreen, bool resizable) {
 
     glEnable(GL_DEBUG_OUTPUT);
     glDebugMessageCallback(this->opengl_debug_callback, this);
-
-    Physics::init();
 }
 
 void arqanore::Window::loop() {
@@ -326,7 +323,6 @@ void arqanore::Window::loop() {
                 window_tick_cb(this, time_step);
             }
 
-            Physics::update(time_step);
             accum -= time_step;
         }
 
