@@ -1,5 +1,4 @@
 #include <stdexcept>
-#include <iostream>
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "arqanore/font.h"
@@ -10,6 +9,7 @@
 void arqanore::Font::generate_glyphs(std::string &path) {
     FT_Library ft_lib;
     FT_Face ft_face;
+    std::vector<char> failed;
 
     if (FT_Init_FreeType(&ft_lib)) {
         throw ArqanoreException("Could not init FreeType library");
@@ -24,7 +24,7 @@ void arqanore::Font::generate_glyphs(std::string &path) {
 
     for (unsigned char c = 0; c < 128; c++) {
         if (FT_Load_Char(ft_face, c, FT_LOAD_RENDER)) {
-            std::cerr << "Failed to parse glyph " << c << std::endl;
+            failed.push_back(c);
             continue;
         }
 
@@ -51,6 +51,17 @@ void arqanore::Font::generate_glyphs(std::string &path) {
 
     FT_Done_Face(ft_face);
     FT_Done_FreeType(ft_lib);
+
+    if (!failed.empty()) {
+        std::string error = "Font parsing partially failed. The following chars could not be loaded from font file:";
+
+        for (char c : failed) {
+            error += ' ';
+            error += c;
+        }
+
+        throw ArqanoreException(error);
+    }
 }
 
 void arqanore::Font::generate_buffers() {

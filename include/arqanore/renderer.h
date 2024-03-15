@@ -38,6 +38,8 @@ namespace arqanore {
         static bool switch_shader(Shader *ptr);
 
     public:
+        static int total_paragraph_rows(Font* font, std::string text, float width);
+
         static Matrix4 generate_model_matrix(Vector3 pos, Quaternion rot, Vector3 scl);
 
         static Matrix4 generate_view_matrix(Camera &camera);

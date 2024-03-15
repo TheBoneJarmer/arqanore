@@ -79,6 +79,64 @@ std::string Renderer::paragraph_parse_tags(std::string &text) {
     return text;
 }
 
+int Renderer::total_paragraph_rows(Font *font, std::string text, float width) {
+    if (font == nullptr) {
+        throw ArqanoreException("Font is null");
+    }
+
+    int advance = 0;
+    int row = 0;
+    std::vector<std::string> words = string_split(text, ' ');
+
+    glBindVertexArray(font->vao);
+
+    for (auto &entry: words) {
+        std::string text = entry;
+        int newlines = 0;
+
+        // Special tags allow for modification of visuals
+        text = paragraph_parse_tags(text);
+
+        // Filter out special characters
+        while (text.contains('\n')) {
+            text = string_replace(text, "\n", "");
+            newlines++;
+        }
+
+        while (text.contains('\t')) {
+            text = string_replace(text, "\t", "    ");
+        }
+
+        // Add space to end of text or else words will be glued together
+        text += " ";
+
+        // Newline check for before
+        float length = font->measure(text);
+
+        if (advance + length > width) {
+            advance = 0;
+            row++;
+        }
+
+        // Render glyph for each char in the text
+        for (auto &c: text) {
+            Glyph *glyph = &font->glyphs[c];
+            advance += glyph->advance >> 6;
+        }
+
+        // Add newline after
+        for (int i = 0; i < newlines; i++) {
+            advance = 0;
+            row++;
+        }
+    }
+
+    // Increase the row number for the final line
+    row++;
+
+    return row;
+}
+
 Matrix4 Renderer::generate_model_matrix(Vector3 pos, Quaternion rot, Vector3 scl) {
     Matrix4 mat = Matrix4::identity();
     mat = Matrix4::scale(mat, scl);
