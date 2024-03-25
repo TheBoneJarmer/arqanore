@@ -35,8 +35,6 @@ namespace arqanore {
 
         static std::string paragraph_parse_tags(std::string& text);
 
-        static bool switch_shader(Shader *ptr);
-
     public:
         static int total_paragraph_rows(Font* font, std::string text, float width);
 
@@ -47,6 +45,8 @@ namespace arqanore {
         static Matrix4 generate_projection_matrix(Camera &camera, Window *window);
 
         static void set_shader(Shader *ptr, unsigned int target);
+        
+        static bool switch_shader(Shader *ptr);
 
         static void render_text(Window *window, Font *font, std::string text, Vector2 position, Color color);
 
