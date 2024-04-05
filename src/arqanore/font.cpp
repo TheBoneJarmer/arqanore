@@ -22,7 +22,7 @@ void arqanore::Font::generate_glyphs(std::string &path) {
     FT_Set_Pixel_Sizes(ft_face, this->pixel_width, this->pixel_height);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    for (unsigned char c = 0; c < 128; c++) {
+    for (unsigned char c = 0; c < 256; c++) {
         if (FT_Load_Char(ft_face, c, FT_LOAD_RENDER)) {
             failed.push_back(c);
             continue;
