@@ -9,6 +9,7 @@ arqanore::Font *font;
 std::string text;
 std::string text_paragraph;
 int scale_factor;
+arqanore::Vector2 scale;
 
 void on_open(arqanore::Window *window) {
     try {
@@ -19,7 +20,7 @@ void on_open(arqanore::Window *window) {
         std::cerr << "An unknown error occurred while loading assets" << std::endl;
     }
 
-    scale_factor = 1;
+    scale_factor = 4;
     text = "Hello, this is a !rgb(0,255,0)normal piece of text! This text will continue to be rendered to the right even if it leaves the screen at some point.";
     text_paragraph = "But this is a parapraph of words. Words are separated by spaces and therefore the renderer does the same."
                      "But not just only that! It also makes sure to enter a new line when a word would reach out of boundaries.\n\n "
@@ -35,27 +36,33 @@ void on_update(arqanore::Window *window, double at) {
     if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
         window->close();
     }
+    
+    if (arqanore::Keyboard::key_pressed(arqanore::Keys::KP_ADD)) {
+        scale_factor++;
+    }
+    
+    if (arqanore::Keyboard::key_pressed(arqanore::Keys::KP_SUBTRACT)) {
+        scale_factor--;
+    }
+    
+    scale = arqanore::Vector2(0.0625 * scale_factor, 0.0625f * scale_factor);
 }
 
 void render_text(arqanore::Window *window) {
     arqanore::Vector2 position(32, 32);
-    arqanore::Vector2 scale(0.25f * scale_factor, 0.25f * scale_factor);
-
     arqanore::Renderer::render_text(window, font, text, position, scale, arqanore::Color::WHITE);
 }
 
 void render_paragraph(arqanore::Window *window) {
     arqanore::Vector2 position(32, 160);
-    arqanore::Vector2 scale(0.25f * scale_factor, 0.25f * scale_factor);
     float width = window->get_width() - 64;
-    int spacing = 8;
+    int spacing = 8 * scale_factor;
 
     arqanore::Renderer::render_paragraph(window, font, text_paragraph, position, scale, spacing, width, arqanore::Color::WHITE);
 }
 
 void render_stats(arqanore::Window *window) {
     arqanore::Vector2 position(32, 128);
-    arqanore::Vector2 scale(0.25f * scale_factor, 0.25f * scale_factor);
     float width = window->get_width() - 64;
 
     auto total = arqanore::Renderer::total_paragraph_rows(font, text_paragraph, scale, width);
