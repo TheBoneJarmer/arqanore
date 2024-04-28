@@ -22,7 +22,7 @@ void main() {
     }
 
     if (u_texture_active == 1) {
-        final_color *= texture2D(u_texture, final_texcoord);
+        final_color *= texture(u_texture, final_texcoord);
     }
 
     frag_color = final_color;

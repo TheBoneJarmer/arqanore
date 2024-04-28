@@ -35,6 +35,10 @@ void arqanore::Font::generate_glyphs(std::string &path) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ft_face->glyph->bitmap.width, ft_face->glyph->bitmap.rows, 0, GL_RED, GL_UNSIGNED_BYTE, ft_face->glyph->bitmap.buffer);
 
         Glyph glyph = {
@@ -134,12 +138,13 @@ arqanore::Font::Font(std::string path, unsigned int width, unsigned int height) 
     generate_buffers();
 }
 
-float arqanore::Font::measure(std::string text) {
+float arqanore::Font::measure(std::string text, float scale) {
     float result = 0;
 
     for (char &c: text) {
         Glyph *glyph = &glyphs[c];
-        result += glyph->advance >> 6;
+        long glyph_advance = glyph->advance * scale;
+        result += glyph_advance >> 6;
     }
 
     return result;

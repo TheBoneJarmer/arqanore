@@ -36,7 +36,7 @@ namespace arqanore {
         static std::string paragraph_parse_tags(std::string& text);
 
     public:
-        static int total_paragraph_rows(Font* font, std::string text, float width);
+        static int total_paragraph_rows(Font* font, std::string text, Vector2 scale, float width);
 
         static Matrix4 generate_model_matrix(Vector3 pos, Quaternion rot, Vector3 scl);
 
@@ -45,12 +45,12 @@ namespace arqanore {
         static Matrix4 generate_projection_matrix(Camera &camera, Window *window);
 
         static void set_shader(Shader *ptr, unsigned int target);
-        
+
         static bool switch_shader(Shader *ptr);
 
-        static void render_text(Window *window, Font *font, std::string text, Vector2 position, Color color);
+        static void render_text(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, Color color);
 
-        static void render_paragraph(Window *window, Font *font, std::string text, Vector2 position, float width, Color color);
+        static void render_paragraph(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, int spacing, float width, Color color);
 
         static void render_polygon(Window *window, Polygon *polygon, Texture *texture, Vector2 position, Vector2 scale, Vector2 origin, Vector2 offset, float angle, bool flip_hor, bool flip_vert, Color color);
 

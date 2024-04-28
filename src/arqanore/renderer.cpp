@@ -79,7 +79,7 @@ std::string Renderer::paragraph_parse_tags(std::string &text) {
     return text;
 }
 
-int Renderer::total_paragraph_rows(Font *font, std::string text, float width) {
+int Renderer::total_paragraph_rows(Font *font, std::string text, Vector2 scale, float width) {
     if (font == nullptr) {
         throw ArqanoreException("Font is null");
     }
@@ -111,7 +111,7 @@ int Renderer::total_paragraph_rows(Font *font, std::string text, float width) {
         text += " ";
 
         // Newline check for before
-        float length = font->measure(text);
+        float length = font->measure(text, scale.x);
 
         if (advance + length > width) {
             advance = 0;
@@ -121,7 +121,8 @@ int Renderer::total_paragraph_rows(Font *font, std::string text, float width) {
         // Render glyph for each char in the text
         for (auto &c: text) {
             Glyph *glyph = &font->glyphs[c];
-            advance += glyph->advance >> 6;
+            long glyph_advance = glyph->advance * scale.x;
+            advance += glyph_advance >> 6;
         }
 
         // Add newline after
@@ -212,7 +213,7 @@ bool arqanore::Renderer::switch_shader(Shader *ptr) {
     return true;
 }
 
-void arqanore::Renderer::render_text(Window *window, Font *font, std::string text, Vector2 position, Color color) {
+void arqanore::Renderer::render_text(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, Color color) {
     switch_shader(shader_font);
 
     if (window == nullptr) {
@@ -228,6 +229,7 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::string tex
 
     shader->set_uniform_2f("u_resolution", window->get_width(), window->get_height());
     shader->set_uniform_2f("u_rotation", 0, 1);
+    shader->set_uniform_vec2("u_scale", scale);
 
     glBindVertexArray(font->vao);
 
@@ -246,8 +248,13 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::string tex
         // Render glyph for each char in the text
         for (auto &c: text) {
             Glyph *glyph = &font->glyphs[c];
-            float text_x = position.x + glyph->left + advance;
-            float text_y = position.y - glyph->top + font->pixel_height;
+            float glyph_left = glyph->left * scale.x;
+            float glyph_top = glyph->top * scale.y;
+            float glyph_height = font->pixel_height * scale.y;
+            long glyph_advance = glyph->advance * scale.x;
+
+            float text_x = position.x + glyph_left + advance;
+            float text_y = position.y - glyph_top + glyph_height;
 
             shader->set_uniform_2f("u_translation", text_x, text_y);
 
@@ -256,7 +263,7 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::string tex
             glDrawArrays(GL_TRIANGLES, c * 6, 6);
             glBindTexture(GL_TEXTURE_2D, 0);
 
-            advance += glyph->advance >> 6;
+            advance += glyph_advance >> 6;
         }
     }
 
@@ -265,7 +272,7 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::string tex
     glBindVertexArray(0);
 }
 
-void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::string text, Vector2 position, float width, Color color) {
+void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, int spacing, float width, Color color) {
     switch_shader(shader_font);
 
     if (window == nullptr) {
@@ -282,6 +289,7 @@ void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::strin
 
     shader->set_uniform_2f("u_resolution", window->get_width(), window->get_height());
     shader->set_uniform_2f("u_rotation", 0, 1);
+    shader->set_uniform_vec2("u_scale", scale);
 
     glBindVertexArray(font->vao);
 
@@ -309,18 +317,23 @@ void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::strin
         text += " ";
 
         // Newline check for before
-        float length = font->measure(text);
+        float length = font->measure(text, scale.x);
 
         if (advance + length > width) {
             advance = 0;
-            row += font->pixel_height;
+            row += font->pixel_height * scale.y + spacing;
         }
 
         // Render glyph for each char in the text
         for (auto &c: text) {
             Glyph *glyph = &font->glyphs[c];
-            float text_x = position.x + glyph->left + advance;
-            float text_y = position.y - glyph->top + font->pixel_height + row;
+            float glyph_left = glyph->left * scale.x;
+            float glyph_top = glyph->top * scale.y;
+            float glyph_height = font->pixel_height * scale.y;
+            long glyph_advance = glyph->advance * scale.x;
+
+            float text_x = position.x + glyph_left + advance;
+            float text_y = position.y - glyph_top + glyph_height + row;
 
             shader->set_uniform_2f("u_translation", text_x, text_y);
 
@@ -329,13 +342,13 @@ void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::strin
             glDrawArrays(GL_TRIANGLES, c * 6, 6);
             glBindTexture(GL_TEXTURE_2D, 0);
 
-            advance += glyph->advance >> 6;
+            advance += glyph_advance >> 6;
         }
 
         // Add newline after
         for (int i = 0; i < newlines; i++) {
             advance = 0;
-            row += font->pixel_height;
+            row += font->pixel_height * scale.y + spacing;
         }
     }
 

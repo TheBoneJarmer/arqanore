@@ -19,5 +19,5 @@ void main() {
         final_texcoord.y *= -1;
     }
 
-    frag_color = color * texture2D(u_texture, final_texcoord);
+    frag_color = color * texture(u_texture, final_texcoord);
 }

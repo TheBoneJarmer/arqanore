@@ -52,7 +52,7 @@ vec3 calc_dir_light(Light light) {
     vec3 specular = light.color * light_specular * u_material.specular;
 
     if (u_material.diffuse_map_active == 1) {
-        vec3 diffuse_map_color = texture2D(u_material.diffuse_map, texcoord).xyz;
+        vec3 diffuse_map_color = texture(u_material.diffuse_map, texcoord).xyz;
 
         diffuse *= diffuse_map_color;
         ambient *= diffuse_map_color;
@@ -60,11 +60,11 @@ vec3 calc_dir_light(Light light) {
     }
 
     if (u_material.ambient_map_active == 1) {
-        ambient *= texture2D(u_material.ambient_map, texcoord).xyz;
+        ambient *= texture(u_material.ambient_map, texcoord).xyz;
     }
 
     if (u_material.specular_map_active == 1) {
-        specular *= texture2D(u_material.specular_map, texcoord).xyz;
+        specular *= texture(u_material.specular_map, texcoord).xyz;
     }
 
     return (ambient + diffuse) * u_material.color;
@@ -92,7 +92,7 @@ vec3 calc_point_light(Light light) {
     vec3 specular = light.color * light_specular * u_material.specular * light_att;
 
     if (u_material.diffuse_map_active == 1) {
-        vec3 diffuse_map_color = texture2D(u_material.diffuse_map, texcoord).xyz;
+        vec3 diffuse_map_color = texture(u_material.diffuse_map, texcoord).xyz;
 
         diffuse *= diffuse_map_color;
         ambient *= diffuse_map_color;
@@ -100,11 +100,11 @@ vec3 calc_point_light(Light light) {
     }
 
     if (u_material.ambient_map_active == 1) {
-        ambient *= texture2D(u_material.ambient_map, texcoord).xyz;
+        ambient *= texture(u_material.ambient_map, texcoord).xyz;
     }
 
     if (u_material.specular_map_active == 1) {
-        specular *= texture2D(u_material.specular_map, texcoord).xyz;
+        specular *= texture(u_material.specular_map, texcoord).xyz;
     }
 
     return (ambient + diffuse + specular) * u_material.color;
