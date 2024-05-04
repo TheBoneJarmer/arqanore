@@ -34,7 +34,7 @@ void on_close(arqanore::Window *window) {
 
 void on_update(arqanore::Window *window, double at) {
     if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
-        window->close();
+        window->set_closed(true);
     }
     
     if (arqanore::Keyboard::key_pressed(arqanore::Keys::KP_ADD)) {
@@ -78,10 +78,10 @@ void on_render_2d(arqanore::Window *window) {
         render_stats(window);
     } catch (arqanore::ArqanoreException &ex) {
         std::cerr << ex.what() << std::endl;
-        window->close();
+        window->set_closed(true);
     } catch (...) {
         std::cerr << "An unknown error occurred while rendering" << std::endl;
-        window->close();
+        window->set_closed(true);
     }
 }
 

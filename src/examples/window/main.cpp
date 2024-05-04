@@ -2,17 +2,22 @@
 #include <arqanore/keyboard.h>
 #include <iostream>
 
-void on_open(arqanore::Window *window) {
+bool closed;
 
+void on_open(arqanore::Window *window) {
+    closed = false;
 }
 
 void on_close(arqanore::Window *window) {
-
+    if (!closed) {
+        window->set_closed(false);
+    }
 }
 
 void on_update(arqanore::Window *window, double at) {
     if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
-        window->close();
+        window->set_closed(true);
+        closed = true;
     }
 }
 

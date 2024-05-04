@@ -105,14 +105,14 @@ void arqanore::Window::mouse_button_callback(GLFWwindow *handle, int button, int
 void arqanore::Window::cursor_position_callback(GLFWwindow *handle, double xpos, double ypos) {
     // This is a fix to prevent the move_x and move_y values to go out of control
     if (Mouse::prev_x == 0 && Mouse::prev_y == 0) {
-        Mouse::prev_x = (float)xpos;
-        Mouse::prev_y = (float)ypos;
+        Mouse::prev_x = (float) xpos;
+        Mouse::prev_y = (float) ypos;
     }
 
     Mouse::prev_x = Mouse::x;
     Mouse::prev_y = Mouse::y;
-    Mouse::x = (float)xpos;
-    Mouse::y = (float)ypos;
+    Mouse::x = (float) xpos;
+    Mouse::y = (float) ypos;
     Mouse::move_x = Mouse::prev_x - Mouse::x;
     Mouse::move_y = Mouse::prev_y - Mouse::y;
 }
@@ -162,6 +162,10 @@ double arqanore::Window::get_fps() {
     return fps;
 }
 
+bool arqanore::Window::is_closed() {
+    return glfwWindowShouldClose(handle);
+}
+
 void arqanore::Window::set_x(int value) {
     this->x = value;
     glfwSetWindowPos(handle, this->x, this->y);
@@ -201,6 +205,10 @@ void arqanore::Window::set_title(std::string value) {
     glfwSetWindowTitle(handle, value.c_str());
 }
 
+void arqanore::Window::set_closed(bool value) {
+    glfwSetWindowShouldClose(handle, value);
+}
+
 arqanore::Window::Window() {
     this->width = 1440;
     this->height = 786;
@@ -233,6 +241,10 @@ arqanore::Window::Window(int width, int height, std::string title) : Window() {
 void arqanore::Window::open(bool fullscreen, bool resizable) {
     init(fullscreen, resizable);
     loop();
+}
+
+void arqanore::Window::close() {
+    glfwSetWindowShouldClose(handle, true);
 }
 
 void arqanore::Window::init(bool fullscreen, bool resizable) {
@@ -367,10 +379,6 @@ void arqanore::Window::loop() {
     Audio::destroy();
 
     glfwTerminate();
-}
-
-void arqanore::Window::close() {
-    glfwSetWindowShouldClose(handle, 1);
 }
 
 void arqanore::Window::on_open(void (*cb)(Window *)) {

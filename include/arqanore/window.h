@@ -66,7 +66,7 @@ namespace arqanore {
 
         static void character_callback(GLFWwindow *handle, unsigned int codepoint);
 
-        static void scroll_callback(GLFWwindow* handle, double xoffset, double yoffset);
+        static void scroll_callback(GLFWwindow *handle, double xoffset, double yoffset);
 
     public:
         int get_width();
@@ -85,6 +85,8 @@ namespace arqanore {
 
         double get_fps();
 
+        bool is_closed();
+
         void set_width(int value);
 
         void set_height(int value);
@@ -98,6 +100,8 @@ namespace arqanore {
         void set_vsync(bool vsync);
 
         void set_clear_color(Color value);
+
+        void set_closed(bool value);
 
         Window();
 
