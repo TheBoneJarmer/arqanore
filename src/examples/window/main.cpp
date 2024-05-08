@@ -19,6 +19,14 @@ void on_update(arqanore::Window *window, double at) {
         window->set_closed(true);
         closed = true;
     }
+
+    if (arqanore::Keyboard::key_pressed(arqanore::Keys::M)) {
+        if (arqanore::Keyboard::key_down(arqanore::Keys::LEFT_ALT)) {
+            window->maximize();
+        } else {
+            window->minimize();
+        }
+    }
 }
 
 void on_render2d(arqanore::Window *window) {
@@ -41,7 +49,7 @@ int main() {
     window.on_render2d(on_render2d);
     window.on_render3d(on_render3d);
     window.on_opengl(on_opengl);
-    window.open(false, true);
+    window.open(false, true, true);
 
     return 0;
 }

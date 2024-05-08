@@ -166,6 +166,18 @@ bool arqanore::Window::is_closed() {
     return glfwWindowShouldClose(handle);
 }
 
+bool arqanore::Window::is_minimized() {
+    return glfwGetWindowAttrib(handle, GLFW_ICONIFIED);
+}
+
+bool arqanore::Window::is_maximized() {
+    return glfwGetWindowAttrib(handle, GLFW_MAXIMIZED);
+}
+
+bool arqanore::Window::is_visible() {
+    return glfwGetWindowAttrib(handle, GLFW_VISIBLE);
+}
+
 void arqanore::Window::set_x(int value) {
     this->x = value;
     glfwSetWindowPos(handle, this->x, this->y);
@@ -238,8 +250,8 @@ arqanore::Window::Window(int width, int height, std::string title) : Window() {
     this->title = title;
 }
 
-void arqanore::Window::open(bool fullscreen, bool resizable) {
-    init(fullscreen, resizable);
+void arqanore::Window::open(bool fullscreen, bool maximized, bool resizable) {
+    init(fullscreen, maximized, resizable);
     loop();
 }
 
@@ -247,7 +259,27 @@ void arqanore::Window::close() {
     glfwSetWindowShouldClose(handle, true);
 }
 
-void arqanore::Window::init(bool fullscreen, bool resizable) {
+void arqanore::Window::minimize() {
+    glfwIconifyWindow(handle);
+}
+
+void arqanore::Window::maximize() {
+    glfwMaximizeWindow(handle);
+}
+
+void arqanore::Window::restore() {
+    glfwRestoreWindow(handle);
+}
+
+void arqanore::Window::show() {
+    glfwShowWindow(handle);
+}
+
+void arqanore::Window::hide() {
+    glfwHideWindow(handle);
+}
+
+void arqanore::Window::init(bool fullscreen, bool maximized, bool resizable) {
     setlocale(LC_ALL, "en_US.utf8");
 
     if (!glfwInit()) {
@@ -259,6 +291,7 @@ void arqanore::Window::init(bool fullscreen, bool resizable) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_RESIZABLE, resizable);
+    glfwWindowHint(GLFW_MAXIMIZED, maximized);
 
     if (fullscreen) {
         handle = glfwCreateWindow(width, height, title.c_str(), glfwGetPrimaryMonitor(), nullptr);

@@ -24,7 +24,7 @@ namespace arqanore {
         Color clear_color;
         double fps;
 
-        void init(bool fullscreen, bool resizable);
+        void init(bool fullscreen, bool maximized, bool resizable);
 
         void loop();
 
@@ -87,6 +87,12 @@ namespace arqanore {
 
         bool is_closed();
 
+        bool is_minimized();
+
+        bool is_maximized();
+
+        bool is_visible();
+
         void set_width(int value);
 
         void set_height(int value);
@@ -107,9 +113,19 @@ namespace arqanore {
 
         Window(int width, int height, std::string title);
 
-        void open(bool fullscreen, bool resizable);
+        void open(bool fullscreen, bool maximized, bool resizable);
 
         void close();
+
+        void minimize();
+
+        void maximize();
+
+        void restore();
+
+        void show();
+
+        void hide();
 
         void on_open(void (*cb)(Window *));
 
