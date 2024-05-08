@@ -74,7 +74,7 @@ int main() {
     window.on_update(on_update);
     window.on_render2d(on_render_2d);
     window.on_opengl(on_opengl);
-    window.open(false, true);
+    window.open(false, true, true);
 
     return 0;
 }
