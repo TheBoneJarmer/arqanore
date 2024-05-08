@@ -23,9 +23,11 @@ void on_open(arqanore::Window *window) {
     scale_factor = 4;
     text = "Hello, this is a !rgb(0,255,0)normal piece of text! This text will continue to be rendered to the right even if it leaves the screen at some point.";
     text_paragraph = "But this is a parapraph of words. Words are separated by spaces and therefore the renderer does the same."
-                     "But not just only that! It also makes sure to enter a new line when a word would reach out of boundaries.\n\n "
-                     "On top of that there is also some hidden features! Like newlines for example. And\tadding\ttabs too! "
-                     "And is not the only thing! It is possible to use !rgba(35,35,185,255)colors as well!";
+                     " But not just only that! It also makes sure to enter a new line when a word would reach out of boundaries.\n\n"
+                     " On top of that there is also some hidden features! Like newlines for example. And\tadding\ttabs too!"
+                     " And that is not the only thing! It is possible to use !rgba(35,35,185,255)colors as well! This only works per word though, mind you."
+                     " And last but not least. You can limit a paragraph. This one for example is limited to !rgb(0,255,0)5 rows. Try resizing the window and see for yourself!"
+                     " In any case. So far the demo paragraph. Thanks for reading!";
 }
 
 void on_close(arqanore::Window *window) {
@@ -36,15 +38,15 @@ void on_update(arqanore::Window *window, double at) {
     if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
         window->set_closed(true);
     }
-    
+
     if (arqanore::Keyboard::key_pressed(arqanore::Keys::KP_ADD)) {
         scale_factor++;
     }
-    
+
     if (arqanore::Keyboard::key_pressed(arqanore::Keys::KP_SUBTRACT)) {
         scale_factor--;
     }
-    
+
     scale = arqanore::Vector2(0.0625 * scale_factor, 0.0625f * scale_factor);
 }
 
@@ -55,10 +57,11 @@ void render_text(arqanore::Window *window) {
 
 void render_paragraph(arqanore::Window *window) {
     arqanore::Vector2 position(32, 160);
+    arqanore::Color color(255, 255, 255);
     float width = window->get_width() - 64;
-    int spacing = 8 * scale_factor;
+    int spacing = 4 * scale_factor;
 
-    arqanore::Renderer::render_paragraph(window, font, text_paragraph, position, scale, spacing, width, arqanore::Color::WHITE);
+    arqanore::Renderer::render_paragraph(window, font, text_paragraph, position, scale, color, spacing, width, 5);
 }
 
 void render_stats(arqanore::Window *window) {

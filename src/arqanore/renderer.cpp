@@ -272,7 +272,7 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::string tex
     glBindVertexArray(0);
 }
 
-void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, int spacing, float width, Color color) {
+void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::string paragraph, Vector2 position, Vector2 scale, Color color, int spacing, float max_width, int max_rows) {
     switch_shader(shader_font);
 
     if (window == nullptr) {
@@ -285,7 +285,8 @@ void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::strin
 
     int advance = 0;
     int row = 0;
-    std::vector<std::string> words = string_split(text, ' ');
+    int row_index = 0;
+    std::vector<std::string> words = string_split(paragraph, ' ');
 
     shader->set_uniform_2f("u_resolution", window->get_width(), window->get_height());
     shader->set_uniform_2f("u_rotation", 0, 1);
@@ -294,14 +295,13 @@ void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::strin
     glBindVertexArray(font->vao);
 
     for (auto &entry: words) {
-        std::string text = entry;
         int newlines = 0;
 
         // Set default color
         shader->set_uniform_rgba("u_color", color);
 
-        // Special tags allow for modification of visuals
-        text = paragraph_parse_tags(text);
+        // Parse entry
+        std::string text = paragraph_parse_tags(entry);
 
         // Filter out special characters
         while (text.contains('\n')) {
@@ -313,18 +313,23 @@ void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::strin
             text = string_replace(text, "\t", "    ");
         }
 
-        // Add space to end of text or else words will be glued together
+        // Add space to end of a word or else words will be glued together
         text += " ";
 
         // Newline check for before
         float length = font->measure(text, scale.x);
 
-        if (advance + length > width) {
+        if (advance + length > max_width) {
             advance = 0;
             row += font->pixel_height * scale.y + spacing;
+            row_index++;
+
+            if (row_index == max_rows) {
+                break;
+            }
         }
 
-        // Render glyph for each char in the text
+        // Render glyph for each char in the word
         for (auto &c: text) {
             Glyph *glyph = &font->glyphs[c];
             float glyph_left = glyph->left * scale.x;
@@ -349,6 +354,15 @@ void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::strin
         for (int i = 0; i < newlines; i++) {
             advance = 0;
             row += font->pixel_height * scale.y + spacing;
+            row_index++;
+
+            if (row_index == max_rows) {
+                break;
+            }
+        }
+
+        if (row_index == max_rows) {
+            break;
         }
     }
 

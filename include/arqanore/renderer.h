@@ -50,7 +50,7 @@ namespace arqanore {
 
         static void render_text(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, Color color);
 
-        static void render_paragraph(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, int spacing, float width, Color color);
+        static void render_paragraph(Window *window, Font *font, std::string paragraph, Vector2 position, Vector2 scale, Color color, int spacing, float max_width, int max_lines);
 
         static void render_polygon(Window *window, Polygon *polygon, Texture *texture, Vector2 position, Vector2 scale, Vector2 origin, Vector2 offset, float angle, bool flip_hor, bool flip_vert, Color color);
 
