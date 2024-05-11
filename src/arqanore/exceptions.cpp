@@ -6,7 +6,6 @@ int arqanore::GlfwException::get_code() {
 
 arqanore::GlfwException::GlfwException() {
     this->code = 0;
-    this->message = nullptr;
 }
 
 arqanore::GlfwException::GlfwException(int code, const char *message) {
