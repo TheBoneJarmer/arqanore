@@ -101,7 +101,7 @@ bool arqanore::Renderer::switch_shader(Shader *ptr) {
     return true;
 }
 
-void arqanore::Renderer::render_text(Window *window, Font *font, std::u32string text, Vector2 position, Vector2 scale, Color color) {
+void arqanore::Renderer::render_text(Window *window, Font *font, std::wstring text, Vector2 position, Vector2 scale, Color color) {
     switch_shader(shader_font);
 
     if (window == nullptr) {
@@ -125,7 +125,7 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::u32string 
         auto glyph = font->glyph(c);
 
         if (glyph == nullptr) {
-            glyph = font->glyph('?');
+            continue;
         }
 
         float glyph_left = glyph->left * scale.x;

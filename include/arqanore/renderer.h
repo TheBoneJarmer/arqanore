@@ -44,7 +44,7 @@ namespace arqanore {
 
         static bool switch_shader(Shader *ptr);
 
-        static void render_text(Window *window, Font *font, std::u32string text, Vector2 position, Vector2 scale, Color color);
+        static void render_text(Window *window, Font *font, std::wstring text, Vector2 position, Vector2 scale, Color color);
 
         static void render_polygon(Window *window, Polygon *polygon, Texture *texture, Vector2 position, Vector2 scale, Vector2 origin, Vector2 offset, float angle, bool flip_hor, bool flip_vert, Color color);
 

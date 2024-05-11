@@ -146,14 +146,14 @@ arqanore::Font::Font(std::string path, unsigned int width, unsigned int height) 
     generate_buffers();
 }
 
-float arqanore::Font::measure(std::u32string text, float scale) {
+float arqanore::Font::measure(std::wstring text, float scale) {
     float result = 0;
 
     for (unsigned int c: text) {
         Glyph *glyph = this->glyph(c);
 
         if (glyph == nullptr) {
-            glyph = this->glyph('?');
+            continue;
         }
 
         long glyph_advance = glyph->advance * scale;
