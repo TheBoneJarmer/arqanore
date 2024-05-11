@@ -18,8 +18,9 @@ namespace arqanore {
         friend class Renderer;
 
     private:
-        Glyph glyphs[65535];
-        const unsigned int glyphs_length = 65535;
+        //65535
+        Glyph glyphs[512];
+        const unsigned int glyphs_length = 512;
 
         unsigned int vbo_vertices;
         unsigned int vbo_texcoords;
