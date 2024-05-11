@@ -146,7 +146,7 @@ arqanore::Font::Font(std::string path, unsigned int width, unsigned int height) 
     generate_buffers();
 }
 
-float arqanore::Font::measure(std::wstring text, float scale) {
+float arqanore::Font::measure(std::u16string text, float scale) {
     float result = 0;
 
     for (unsigned int c: text) {

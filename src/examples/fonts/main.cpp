@@ -6,14 +6,14 @@
 #include "arqanore/exceptions.h"
 
 arqanore::Font *font;
-std::wstring text1;
-std::wstring text2;
+std::u16string text1;
+std::u16string text2;
 
 void on_open(arqanore::Window *window) {
     try {
         font = new arqanore::Font("assets/fonts/default.ttf", 0, 16);
-        text1 = L"Hello, this is a normal piece of text! This text will continue to be rendered to the right even if it leaves the screen at some point.";
-        text2 = L"And this text contains Unicode characters: Ö ö ó ò Ü ü ú ù ©";
+        text1 = u"Hello, this is a normal piece of text! This text will continue to be rendered to the right even if it leaves the screen at some point.";
+        text2 = u"And this text contains Unicode characters: Ö ö ó ò Ü ü ú ù ©";
     } catch (arqanore::ArqanoreException &ex) {
         std::cerr << ex.what() << std::endl;
     } catch (...) {
