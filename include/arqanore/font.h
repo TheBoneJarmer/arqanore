@@ -18,7 +18,9 @@ namespace arqanore {
         friend class Renderer;
 
     private:
-        Glyph glyphs[128];
+        Glyph glyphs[65535];
+        const unsigned int glyphs_length = 65535;
+
         unsigned int vbo_vertices;
         unsigned int vbo_texcoords;
         unsigned int vao;
@@ -30,10 +32,12 @@ namespace arqanore {
         void generate_buffers();
 
     public:
+        Glyph* glyph(unsigned int code);
+
         Font();
 
         Font(std::string path, unsigned int width, unsigned int height);
 
-        float measure(std::string text, float scale);
+        float measure(std::u32string text, float scale);
     };
 }

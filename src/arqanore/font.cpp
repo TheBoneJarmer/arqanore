@@ -9,7 +9,7 @@
 void arqanore::Font::generate_glyphs(std::string &path) {
     FT_Library ft_lib;
     FT_Face ft_face;
-    std::vector<char> failed;
+    std::vector<unsigned int> failed;
 
     if (FT_Init_FreeType(&ft_lib)) {
         throw ArqanoreException("Could not init FreeType library");
@@ -22,8 +22,8 @@ void arqanore::Font::generate_glyphs(std::string &path) {
     FT_Set_Pixel_Sizes(ft_face, this->pixel_width, this->pixel_height);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    for (unsigned char c = 0; c < 128; c++) {
-        if (FT_Load_Char(ft_face, c, FT_LOAD_RENDER)) {
+    for (unsigned int c = 0; c < glyphs_length; c++) {
+        if (FT_Load_Char(ft_face, c, FT_LOAD_RENDER) != 0) {
             failed.push_back(c);
             continue;
         }
@@ -57,9 +57,9 @@ void arqanore::Font::generate_glyphs(std::string &path) {
     FT_Done_FreeType(ft_lib);
 
     if (!failed.empty()) {
-        std::string error = "Font parsing partially failed. The following chars could not be loaded from font file:";
+        auto error = "Font parsing partially failed. The following chars could not be loaded from font file:";
 
-        for (char c : failed) {
+        for (unsigned int c: failed) {
             error += ' ';
             error += c;
         }
@@ -69,7 +69,7 @@ void arqanore::Font::generate_glyphs(std::string &path) {
 }
 
 void arqanore::Font::generate_buffers() {
-    int vertices_count = 128 * 12;
+    int vertices_count = glyphs_length * 12;
     int i = 0;
     float vertices[vertices_count];
     float texcoords[vertices_count];
@@ -126,6 +126,14 @@ void arqanore::Font::generate_buffers() {
     glBindVertexArray(0);
 }
 
+arqanore::Glyph *arqanore::Font::glyph(unsigned int code) {
+    if (code > glyphs_length) {
+        return nullptr;
+    }
+
+    return &this->glyphs[code];
+}
+
 arqanore::Font::Font() {
 
 }
@@ -138,11 +146,16 @@ arqanore::Font::Font(std::string path, unsigned int width, unsigned int height) 
     generate_buffers();
 }
 
-float arqanore::Font::measure(std::string text, float scale) {
+float arqanore::Font::measure(std::u32string text, float scale) {
     float result = 0;
 
-    for (char &c: text) {
-        Glyph *glyph = &glyphs[c];
+    for (unsigned int c: text) {
+        Glyph *glyph = this->glyph(c);
+
+        if (glyph == nullptr) {
+            glyph = this->glyph('?');
+        }
+
         long glyph_advance = glyph->advance * scale;
         result += glyph_advance >> 6;
     }

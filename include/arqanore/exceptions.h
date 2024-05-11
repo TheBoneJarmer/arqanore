@@ -6,7 +6,7 @@ namespace arqanore {
     class GlfwException : public std::exception {
     private:
         int code;
-        const char *message;
+        std::string message;
 
     public:
         int get_code();
@@ -27,6 +27,6 @@ namespace arqanore {
 
         ArqanoreException(std::string message);
 
-        const char* what();
+        const char *what();
     };
 }

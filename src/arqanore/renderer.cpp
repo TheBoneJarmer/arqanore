@@ -26,118 +26,6 @@ void Renderer::reset() {
     glUseProgram(0);
 }
 
-std::string Renderer::paragraph_parse_tags(std::string &text) {
-    Shader *shader = shader_font;
-
-    if (text.starts_with("!rgb(")) {
-        int value_index_start = 5;
-        int value_index_end = text.find(')');
-        std::string value = text.substr(value_index_start, value_index_end - value_index_start);
-
-        if (!value.contains(",") || value.size() > 11 || value.size() < 5) {
-            throw ArqanoreException("Incorrect value detected in rgb tag.");
-        }
-
-        std::vector<std::string> values = string_split(value, ',');
-
-        if (values.size() != 3) {
-            throw ArqanoreException("Not enough components provided for value in rgba tag.");
-        }
-
-        float r = std::stof(values[0]);
-        float g = std::stof(values[1]);
-        float b = std::stof(values[2]);
-
-        text = text.substr(value_index_end + 1);
-        shader->set_uniform_4f("u_color", r / 255.f, g / 255.f, b / 255.f, 1);
-    }
-
-    if (text.starts_with("!rgba(")) {
-        int value_index_start = 6;
-        int value_index_end = text.find(')');
-        std::string value = text.substr(value_index_start, value_index_end - value_index_start);
-
-        if (!value.contains(",") || value.size() > 15 || value.size() < 7) {
-            throw ArqanoreException("Incorrect value detected in rgb tag.");
-        }
-
-        std::vector<std::string> values = string_split(value, ',');
-
-        if (values.size() != 4) {
-            throw ArqanoreException("Not enough components provided for value in rgba tag.");
-        }
-
-        float r = std::stof(values[0]);
-        float g = std::stof(values[1]);
-        float b = std::stof(values[2]);
-        float a = std::stof(values[3]);
-
-        text = text.substr(value_index_end + 1);
-        shader->set_uniform_4f("u_color", r / 255.f, g / 255.f, b / 255.f, a / 255.f);
-    }
-
-    return text;
-}
-
-int Renderer::total_paragraph_rows(Font *font, std::string text, Vector2 scale, float width) {
-    if (font == nullptr) {
-        throw ArqanoreException("Font is null");
-    }
-
-    int advance = 0;
-    int row = 0;
-    std::vector<std::string> words = string_split(text, ' ');
-
-    glBindVertexArray(font->vao);
-
-    for (auto &entry: words) {
-        std::string text = entry;
-        int newlines = 0;
-
-        // Special tags allow for modification of visuals
-        text = paragraph_parse_tags(text);
-
-        // Filter out special characters
-        while (text.contains('\n')) {
-            text = string_replace(text, "\n", "");
-            newlines++;
-        }
-
-        while (text.contains('\t')) {
-            text = string_replace(text, "\t", "    ");
-        }
-
-        // Add space to end of text or else words will be glued together
-        text += " ";
-
-        // Newline check for before
-        float length = font->measure(text, scale.x);
-
-        if (advance + length > width) {
-            advance = 0;
-            row++;
-        }
-
-        // Render glyph for each char in the text
-        for (auto &c: text) {
-            Glyph *glyph = &font->glyphs[c];
-            long glyph_advance = glyph->advance * scale.x;
-            advance += glyph_advance >> 6;
-        }
-
-        // Add newline after
-        for (int i = 0; i < newlines; i++) {
-            advance = 0;
-            row++;
-        }
-    }
-
-    // Increase the row number for the final line
-    row++;
-
-    return row;
-}
-
 Matrix4 Renderer::generate_model_matrix(Vector3 pos, Quaternion rot, Vector3 scl) {
     Matrix4 mat = Matrix4::identity();
     mat = Matrix4::scale(mat, scl);
@@ -213,7 +101,7 @@ bool arqanore::Renderer::switch_shader(Shader *ptr) {
     return true;
 }
 
-void arqanore::Renderer::render_text(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, Color color) {
+void arqanore::Renderer::render_text(Window *window, Font *font, std::u32string text, Vector2 position, Vector2 scale, Color color) {
     switch_shader(shader_font);
 
     if (window == nullptr) {
@@ -225,145 +113,37 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::string tex
     }
 
     int advance = 0;
-    std::vector<std::string> words = string_split(text, ' ');
 
     shader->set_uniform_2f("u_resolution", window->get_width(), window->get_height());
     shader->set_uniform_2f("u_rotation", 0, 1);
     shader->set_uniform_vec2("u_scale", scale);
+    shader->set_uniform_rgba("u_color", color);
 
     glBindVertexArray(font->vao);
 
-    for (auto &entry: words) {
-        std::string text = entry;
+    for (unsigned int c : text) {
+        auto glyph = font->glyph(c);
 
-        // Set default color
-        shader->set_uniform_rgba("u_color", color);
-
-        // Special tags allow for modification of visuals
-        text = paragraph_parse_tags(text);
-
-        // Add space to end of text or else words will be glued together
-        text += " ";
-
-        // Render glyph for each char in the text
-        for (auto &c: text) {
-            Glyph *glyph = &font->glyphs[c];
-            float glyph_left = glyph->left * scale.x;
-            float glyph_top = glyph->top * scale.y;
-            float glyph_height = font->pixel_height * scale.y;
-            long glyph_advance = glyph->advance * scale.x;
-
-            float text_x = position.x + glyph_left + advance;
-            float text_y = position.y - glyph_top + glyph_height;
-
-            shader->set_uniform_2f("u_translation", text_x, text_y);
-
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, glyph->id);
-            glDrawArrays(GL_TRIANGLES, c * 6, 6);
-            glBindTexture(GL_TEXTURE_2D, 0);
-
-            advance += glyph_advance >> 6;
-        }
-    }
-
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindVertexArray(0);
-}
-
-void arqanore::Renderer::render_paragraph(Window *window, Font *font, std::string paragraph, Vector2 position, Vector2 scale, Color color, int spacing, float max_width, int max_rows) {
-    switch_shader(shader_font);
-
-    if (window == nullptr) {
-        throw ArqanoreException("Window is null");
-    }
-
-    if (font == nullptr) {
-        throw ArqanoreException("Font is null");
-    }
-
-    int advance = 0;
-    int row = 0;
-    int row_index = 0;
-    std::vector<std::string> words = string_split(paragraph, ' ');
-
-    shader->set_uniform_2f("u_resolution", window->get_width(), window->get_height());
-    shader->set_uniform_2f("u_rotation", 0, 1);
-    shader->set_uniform_vec2("u_scale", scale);
-
-    glBindVertexArray(font->vao);
-
-    for (auto &entry: words) {
-        int newlines = 0;
-
-        // Set default color
-        shader->set_uniform_rgba("u_color", color);
-
-        // Parse entry
-        std::string text = paragraph_parse_tags(entry);
-
-        // Filter out special characters
-        while (text.contains('\n')) {
-            text = string_replace(text, "\n", "");
-            newlines++;
+        if (glyph == nullptr) {
+            glyph = font->glyph('?');
         }
 
-        while (text.contains('\t')) {
-            text = string_replace(text, "\t", "    ");
-        }
+        float glyph_left = glyph->left * scale.x;
+        float glyph_top = glyph->top * scale.y;
+        float glyph_height = font->pixel_height * scale.y;
+        long glyph_advance = glyph->advance * scale.x;
 
-        // Add space to end of a word or else words will be glued together
-        text += " ";
+        float text_x = position.x + glyph_left + advance;
+        float text_y = position.y - glyph_top + glyph_height;
 
-        // Newline check for before
-        float length = font->measure(text, scale.x);
+        shader->set_uniform_2f("u_translation", text_x, text_y);
 
-        if (advance + length > max_width) {
-            advance = 0;
-            row += font->pixel_height * scale.y + spacing;
-            row_index++;
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, glyph->id);
+        glDrawArrays(GL_TRIANGLES, c * 6, 6);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
-            if (row_index == max_rows) {
-                break;
-            }
-        }
-
-        // Render glyph for each char in the word
-        for (auto &c: text) {
-            Glyph *glyph = &font->glyphs[c];
-            float glyph_left = glyph->left * scale.x;
-            float glyph_top = glyph->top * scale.y;
-            float glyph_height = font->pixel_height * scale.y;
-            long glyph_advance = glyph->advance * scale.x;
-
-            float text_x = position.x + glyph_left + advance;
-            float text_y = position.y - glyph_top + glyph_height + row;
-
-            shader->set_uniform_2f("u_translation", text_x, text_y);
-
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, glyph->id);
-            glDrawArrays(GL_TRIANGLES, c * 6, 6);
-            glBindTexture(GL_TEXTURE_2D, 0);
-
-            advance += glyph_advance >> 6;
-        }
-
-        // Add newline after
-        for (int i = 0; i < newlines; i++) {
-            advance = 0;
-            row += font->pixel_height * scale.y + spacing;
-            row_index++;
-
-            if (row_index == max_rows) {
-                break;
-            }
-        }
-
-        if (row_index == max_rows) {
-            break;
-        }
+        advance += glyph_advance >> 6;
     }
 
     glActiveTexture(GL_TEXTURE0);

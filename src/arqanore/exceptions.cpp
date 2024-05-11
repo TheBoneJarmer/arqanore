@@ -15,7 +15,7 @@ arqanore::GlfwException::GlfwException(int code, const char *message) {
 }
 
 const char *arqanore::GlfwException::what() {
-    return this->message;
+    return (const char *) message.c_str();
 }
 
 arqanore::ArqanoreException::ArqanoreException() {
@@ -27,5 +27,5 @@ arqanore::ArqanoreException::ArqanoreException(std::string message) {
 }
 
 const char *arqanore::ArqanoreException::what() {
-    return this->message.c_str();
+    return (const char *) message.c_str();
 }
