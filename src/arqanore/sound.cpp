@@ -1,5 +1,6 @@
 #include "arqanore/sound.h"
 #include "arqanore/audio.h"
+#include "arqanore/exceptions.h"
 
 arqanore::Sound::Sound() {
     this->wav = nullptr;
@@ -36,6 +37,10 @@ double arqanore::Sound::pan() {
 }
 
 void arqanore::Sound::looping(bool value) {
+    if (!playing()) {
+        throw arqanore::ArqanoreException("Cannot loop sound because the sound is not playing.");
+    }
+
     Audio::engine->setLooping(this->handle, value);
 }
 
