@@ -73,7 +73,7 @@ int main() {
     window.on_update(on_update);
     window.on_render2d(on_render2d);
     window.on_render3d(on_render3d);
-    window.on_opengl(on_opengl);
+    //window.on_opengl(on_opengl);
     window.open(false, true, true);
 
     return 0;

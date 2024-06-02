@@ -9,6 +9,7 @@
 #include "arqanore/renderer.h"
 #include "arqanore/scene.h"
 
+/*
 void arqanore::Window::opengl_debug_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char *message, const void *user_param) {
     auto win = (Window *) user_param;
     auto str_type = std::to_string(type);
@@ -34,6 +35,7 @@ void arqanore::Window::opengl_debug_callback(unsigned int source, unsigned int t
         win->window_opengl_cb(win, str_type, str_severity, str_message);
     }
 }
+*/
 
 void arqanore::Window::error_callback(int error_code, const char *error_description) {
     throw new arqanore::GlfwException(error_code, error_description);
@@ -241,7 +243,7 @@ arqanore::Window::Window() {
     this->window_resize_cb = nullptr;
     this->window_pos_cb = nullptr;
     this->window_char_cb = nullptr;
-    this->window_opengl_cb = nullptr;
+    //this->window_opengl_cb = nullptr;
 }
 
 arqanore::Window::Window(int width, int height, std::string title) : Window() {
@@ -320,8 +322,8 @@ void arqanore::Window::init(bool fullscreen, bool maximized, bool resizable) {
     glfwSetCharCallback(handle, character_callback);
     glfwSetScrollCallback(handle, scroll_callback);
 
-    glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback(this->opengl_debug_callback, this);
+    //glEnable(GL_DEBUG_OUTPUT);
+    //glDebugMessageCallback(this->opengl_debug_callback, this);
 }
 
 void arqanore::Window::loop() {
@@ -450,6 +452,8 @@ void arqanore::Window::on_char(void (*cb)(Window *, unsigned int)) {
     window_char_cb = cb;
 }
 
+/*
 void arqanore::Window::on_opengl(void (*cb)(Window *, std::string, std::string, std::string)) {
     window_opengl_cb = cb;
 }
+*/

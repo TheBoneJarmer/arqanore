@@ -46,9 +46,9 @@ namespace arqanore {
 
         void (*window_char_cb)(Window *window, unsigned int);
 
-        void (*window_opengl_cb)(Window *window, std::string type, std::string severity, std::string message);
+        //void (*window_opengl_cb)(Window *window, std::string type, std::string severity, std::string message);
 
-        static void opengl_debug_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char *message, const void *user_param);
+        //static void opengl_debug_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char *message, const void *user_param);
 
         static void error_callback(int error_code, const char *error_description);
 
@@ -145,6 +145,6 @@ namespace arqanore {
 
         void on_char(void (*cb)(Window *, unsigned int));
 
-        void on_opengl(void (*cb)(Window *, std::string, std::string, std::string));
+        //void on_opengl(void (*cb)(Window *, std::string, std::string, std::string));
     };
 }
