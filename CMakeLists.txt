@@ -73,6 +73,7 @@ set(ARQ_SRC
 set(ARQ_LIBRARIES glfw freetype soloudw dl -static-libgcc -static-libstdc++ -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 
 if (WIN32)
+	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
     set(ARQ_LIBRARIES glfw3 freetype soloudw -static-libgcc -static-libstdc++)
 endif (WIN32)
 
@@ -87,7 +88,7 @@ endif (WIN32)
 link_libraries(${ARQ_LIBRARIES})
 
 # Configure arqanore
-add_library(arqanore ${ARQ_INCLUDE} ${ARQ_SRC})
+add_library(arqanore SHARED ${ARQ_INCLUDE} ${ARQ_SRC})
 set_target_properties(arqanore PROPERTIES OUTPUT_NAME "arqanore")
 set_target_properties(arqanore PROPERTIES VERSION ${ARQ_VERSION})
 
