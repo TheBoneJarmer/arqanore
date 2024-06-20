@@ -70,7 +70,7 @@ set(ARQ_SRC
         src/arqanore/quaternion.cpp)
 
 # Generate variables for the compiler and linker
-set(ARQ_LIBRARIES glfw3 freetype soloudw dl -static-libgcc -static-libstdc++ -fPIC -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
+set(ARQ_LIBRARIES glfw3 freetype soloudw dl -static-libgcc -static-libstdc++ -Wl,-rpath='$ORIGIN:$ORIGIN/lib')
 
 if (WIN32)
     set(ARQ_LIBRARIES glfw3 freetype soloudw -static-libgcc -static-libstdc++)
@@ -88,6 +88,7 @@ link_libraries(${ARQ_LIBRARIES})
 
 # Configure arqanore
 add_library(arqanore ${ARQ_INCLUDE} ${ARQ_SRC})
+set_target_properties(arqanore PROPERTIES POSITION_INDEPENDENT_CODE ON)
 set_target_properties(arqanore PROPERTIES OUTPUT_NAME "arqanore")
 set_target_properties(arqanore PROPERTIES VERSION ${ARQ_VERSION})
 
