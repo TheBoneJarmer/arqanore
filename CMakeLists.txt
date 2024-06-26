@@ -98,3 +98,4 @@ add_executable(example_sprites ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/sprites/ma
 add_executable(example_fonts ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/fonts/main.cpp)
 add_executable(example_models ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/models/main.cpp)
 add_executable(example_audio ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/audio/main.cpp)
+add_executable(example_shaders ${ARQ_INCLUDE} ${ARQ_SRC} src/examples/shaders/main.cpp)
