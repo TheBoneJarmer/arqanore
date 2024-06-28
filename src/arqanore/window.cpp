@@ -9,34 +9,6 @@
 #include "arqanore/renderer.h"
 #include "arqanore/scene.h"
 
-/*
-void arqanore::Window::opengl_debug_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char *message, const void *user_param) {
-    auto win = (Window *) user_param;
-    auto str_type = std::to_string(type);
-    auto str_severity = std::to_string(severity);
-    auto str_message = std::string(message);
-
-    if (type == GL_DEBUG_TYPE_ERROR) str_type = "ERROR";
-    if (type == GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR) str_type = "DEPRECATED_BEHAVIOR";
-    if (type == GL_DEBUG_TYPE_MARKER) str_type = "MARKER";
-    if (type == GL_DEBUG_TYPE_OTHER) str_type = "OTHER";
-    if (type == GL_DEBUG_TYPE_PERFORMANCE) str_type = "PERFORMANCE";
-    if (type == GL_DEBUG_TYPE_POP_GROUP) str_type = "POP_GROUP";
-    if (type == GL_DEBUG_TYPE_PORTABILITY) str_type = "PORTABILITY";
-    if (type == GL_DEBUG_TYPE_PUSH_GROUP) str_type = "PUSH_GROUP";
-    if (type == GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR) str_type = "UNDEFINED_BEHAVIOR";
-
-    if (severity == GL_DEBUG_SEVERITY_HIGH) str_severity = "HIGH";
-    if (severity == GL_DEBUG_SEVERITY_LOW) str_severity = "LOW";
-    if (severity == GL_DEBUG_SEVERITY_MEDIUM) str_severity = "MEDIUM";
-    if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) str_severity = "NOTIFICATION";
-
-    if (win->window_opengl_cb != nullptr) {
-        win->window_opengl_cb(win, str_type, str_severity, str_message);
-    }
-}
-*/
-
 void arqanore::Window::error_callback(int error_code, const char *error_description) {
     throw new arqanore::GlfwException(error_code, error_description);
 }
@@ -235,6 +207,7 @@ arqanore::Window::Window() {
     this->fps = 0;
 
     this->window_open_cb = nullptr;
+    this->window_input_cb = nullptr;
     this->window_tick_cb = nullptr;
     this->window_update_cb = nullptr;
     this->window_render2d_cb = nullptr;
@@ -243,7 +216,6 @@ arqanore::Window::Window() {
     this->window_resize_cb = nullptr;
     this->window_pos_cb = nullptr;
     this->window_char_cb = nullptr;
-    //this->window_opengl_cb = nullptr;
 }
 
 arqanore::Window::Window(int width, int height, std::string title) : Window() {
@@ -323,7 +295,7 @@ void arqanore::Window::init(bool fullscreen, bool maximized, bool resizable) {
 }
 
 void arqanore::Window::loop() {
-    double time_step = 0.01;
+    double time_step = 1.0 / 60.0;
     
     double new_time = 0.0;
     double delta_time = 0.0;
@@ -355,6 +327,10 @@ void arqanore::Window::loop() {
 
             fps_count = 0;
             fps_time = new_time;
+        }
+
+        if (window_input_cb != nullptr) {
+            window_input_cb(this);
         }
 
         // Fixed time step loop
@@ -415,6 +391,8 @@ void arqanore::Window::on_open(void (*cb)(Window *)) {
     window_open_cb = cb;
 }
 
+
+
 void arqanore::Window::on_tick(void (*cb)(Window *, double)) {
     window_tick_cb = cb;
 }
@@ -447,8 +425,6 @@ void arqanore::Window::on_char(void (*cb)(Window *, unsigned int)) {
     window_char_cb = cb;
 }
 
-/*
-void arqanore::Window::on_opengl(void (*cb)(Window *, std::string, std::string, std::string)) {
-    window_opengl_cb = cb;
+void arqanore::Window::on_input(void (*cb)(Window *)) {
+    window_input_cb = cb;
 }
-*/

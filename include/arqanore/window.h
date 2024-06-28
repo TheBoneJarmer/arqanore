@@ -32,6 +32,8 @@ namespace arqanore {
 
         void (*window_close_cb)(Window *window);
 
+        void (*window_input_cb)(Window *window);
+
         void (*window_tick_cb)(Window *window, double);
 
         void (*window_update_cb)(Window *window, double);
@@ -128,6 +130,8 @@ namespace arqanore {
         void hide();
 
         void on_open(void (*cb)(Window *));
+
+        void on_input(void (*cb)(Window *));
 
         void on_tick(void (*cb)(Window *, double));
 
