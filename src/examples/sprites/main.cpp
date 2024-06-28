@@ -9,19 +9,20 @@ arqanore::Sprite *sprite;
 arqanore::Vector2 position;
 arqanore::Vector2 scale;
 
-int frame_hor;
-int frame_vert;
-int frame_time;
+int frame_hor = 0;
+int frame_vert = 0;
+int frame_time = 0;
+int direction = 2;
 
 void on_open(arqanore::Window *window) {
+    window->set_vsync(false);
+
     try {
-        sprite = new arqanore::Sprite("assets/sprites/cavern.png", 16, 16);
+        sprite = new arqanore::Sprite("assets/sprites/player.png", 16, 16);
 
         position = arqanore::Vector2(64, 64);
-        scale = arqanore::Vector2(16, 16);
-
-        frame_hor = 0;
-        frame_time = 0;
+        scale = arqanore::Vector2(4, 4);
+        frame_hor = direction * 4;
     } catch (arqanore::ArqanoreException &ex) {
         std::cerr << ex.what() << std::endl;
         window->close();
@@ -32,11 +33,7 @@ void on_close(arqanore::Window *window) {
     delete sprite;
 }
 
-void on_update(arqanore::Window *window, double at) {
-    if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
-        window->close();
-    }
-
+void on_tick(arqanore::Window *window, double dt) {
     if (frame_time < 16) {
         frame_time++;
     } else {
@@ -44,13 +41,43 @@ void on_update(arqanore::Window *window, double at) {
         frame_hor++;
     }
 
-    if (frame_hor == sprite->get_frames_hor()) {
-        frame_hor = 0;
-        frame_vert++;
+    if (frame_hor >= direction * 4 + 4) {
+        frame_hor = direction * 4;
     }
 
-    if (frame_vert == sprite->get_frames_vert()) {
-        frame_vert = 0;
+    if (frame_hor < direction * 4) {
+        frame_hor = direction * 4;
+    }
+
+    if (direction == 1) position.y--;
+    if (direction == 0) position.y++;
+    if (direction == 2) position.x++;
+    if (direction == 3) position.x--;
+
+    if (direction == 2 && position.x >= window->get_width() - 128) {
+        direction = 0;
+        position.x = window->get_width() - 128;
+    }
+
+    if (direction == 0 && position.y >= window->get_height() - 128) {
+        direction = 3;
+        position.y = window->get_height() - 128;
+    }
+
+    if (direction == 3 && position.x < 128) {
+        direction = 1;
+        position.x = 128;
+    }
+
+    if (direction == 1 && position.y < 128) {
+        direction = 2;
+        position.y = 128;
+    }
+}
+
+void on_update(arqanore::Window *window, double at) {
+    if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
+        window->close();
     }
 }
 
@@ -63,17 +90,13 @@ void on_render_2d(arqanore::Window *window) {
     }
 }
 
-void on_opengl(arqanore::Window *window, std::string type, std::string severity, std::string message) {
-    std::cout << "[" << type << "]" << "[" << severity << "] " << message << std::endl;
-}
-
 int main() {
     auto window = arqanore::Window(1440, 768, "Arqanore - Sprites");
     window.on_open(on_open);
     window.on_close(on_close);
     window.on_update(on_update);
+    window.on_tick(on_tick);
     window.on_render2d(on_render_2d);
-    //window.on_opengl(on_opengl);
     window.open(false, true, true);
 
     return 0;

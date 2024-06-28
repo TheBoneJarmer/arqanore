@@ -121,7 +121,57 @@ void arqanore::Renderer::render_text(Window *window, Font *font, std::u16string 
 
     glBindVertexArray(font->vao);
 
-    for (unsigned int c : text) {
+    for (unsigned int c: text) {
+        auto glyph = font->glyph(c);
+
+        if (glyph == nullptr) {
+            continue;
+        }
+
+        float glyph_left = glyph->left * scale.x;
+        float glyph_top = glyph->top * scale.y;
+        float glyph_height = font->pixel_height * scale.y;
+        long glyph_advance = glyph->advance * scale.x;
+
+        float text_x = position.x + glyph_left + advance;
+        float text_y = position.y - glyph_top + glyph_height;
+
+        shader->set_uniform_2f("u_translation", text_x, text_y);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, glyph->id);
+        glDrawArrays(GL_TRIANGLES, c * 6, 6);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        advance += glyph_advance >> 6;
+    }
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
+}
+
+void arqanore::Renderer::render_text(Window *window, Font *font, std::string text, Vector2 position, Vector2 scale, Color color) {
+    switch_shader(shader_font);
+
+    if (window == nullptr) {
+        throw ArqanoreException("Window is null");
+    }
+
+    if (font == nullptr) {
+        throw ArqanoreException("Font is null");
+    }
+
+    int advance = 0;
+
+    shader->set_uniform_2f("u_resolution", window->get_width(), window->get_height());
+    shader->set_uniform_2f("u_rotation", 0, 1);
+    shader->set_uniform_vec2("u_scale", scale);
+    shader->set_uniform_rgba("u_color", color);
+
+    glBindVertexArray(font->vao);
+
+    for (unsigned int c: text) {
         auto glyph = font->glyph(c);
 
         if (glyph == nullptr) {

@@ -311,7 +311,6 @@ void arqanore::Window::init(bool fullscreen, bool maximized, bool resizable) {
         throw ArqanoreException("Failed to initialize GLAD");
     }
 
-    glfwSwapInterval(1);
     glfwSetWindowUserPointer(handle, this);
     glfwSetWindowCloseCallback(handle, window_close_callback);
     glfwSetWindowSizeCallback(handle, window_resize_callback);
@@ -321,15 +320,16 @@ void arqanore::Window::init(bool fullscreen, bool maximized, bool resizable) {
     glfwSetCursorPosCallback(handle, cursor_position_callback);
     glfwSetCharCallback(handle, character_callback);
     glfwSetScrollCallback(handle, scroll_callback);
-
-    //glEnable(GL_DEBUG_OUTPUT);
-    //glDebugMessageCallback(this->opengl_debug_callback, this);
 }
 
 void arqanore::Window::loop() {
-    float time_step = 1.f / 60.f;
-    double previous_time = glfwGetTime();
+    double time_step = 0.01;
+    
+    double new_time = 0.0;
+    double delta_time = 0.0;
+    double last_update = glfwGetTime();
     double accum = 0.0;
+    
     double fps_count = 0;
     double fps_time = 0;
 
@@ -343,23 +343,18 @@ void arqanore::Window::loop() {
     }
 
     while (!glfwWindowShouldClose(handle)) {
-        double current_time = glfwGetTime();
-        double delta_time = current_time - previous_time;
-        previous_time = current_time;
+        new_time = glfwGetTime();
+        delta_time = new_time - last_update;
+        last_update += delta_time;
 
         // Calculate fps
         fps_count++;
 
-        if (current_time - fps_time >= 1.0) {
+        if (new_time - fps_time >= 1.0) {
             this->fps = fps_count;
 
             fps_count = 0;
-            fps_time = current_time;
-        }
-
-        // Fix delta time to prevent lock
-        if (delta_time > 0.25) {
-            delta_time = 0.25;
+            fps_time = new_time;
         }
 
         // Fixed time step loop
