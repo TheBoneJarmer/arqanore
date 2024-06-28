@@ -22,10 +22,10 @@ void on_open(arqanore::Window *window) {
         shader->add_fragment("assets/shaders/sprity_f.glsl", SHADER_SOURCE_TYPE_FILE);
         shader->compile();
 
-        sprite = new arqanore::Sprite("assets/sprites/cavern.png", 16, 16);
+        sprite = new arqanore::Sprite("assets/sprites/player.png", 16, 16);
 
         position = arqanore::Vector2(64, 64);
-        scale = arqanore::Vector2(16, 16);
+        scale = arqanore::Vector2(4, 4);
 
         frame_hor = 0;
         frame_time = 0;
@@ -53,11 +53,6 @@ void on_update(arqanore::Window *window, double at) {
 
     if (frame_hor == sprite->get_frames_hor()) {
         frame_hor = 0;
-        frame_vert++;
-    }
-
-    if (frame_vert == sprite->get_frames_vert()) {
-        frame_vert = 0;
     }
 }
 
