@@ -1,6 +1,5 @@
 #include <arqanore/window.h>
 #include <arqanore/keyboard.h>
-#include <iostream>
 
 bool closed;
 
@@ -37,10 +36,6 @@ void on_render3d(arqanore::Window *window) {
 
 }
 
-void on_opengl(arqanore::Window* window, std::string type, std::string severity, std::string message) {
-    std::cout << "[" << type << "]" << "[" << severity << "] " << message << std::endl;
-}
-
 int main() {
     auto window = arqanore::Window(1440, 768, "Arqanore");
     window.on_open(on_open);
@@ -48,8 +43,7 @@ int main() {
     window.on_update(on_update);
     window.on_render2d(on_render2d);
     window.on_render3d(on_render3d);
-    //window.on_opengl(on_opengl);
-    window.open(false, true, true);
+    window.open(false, false, true);
 
     return 0;
 }

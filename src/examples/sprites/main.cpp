@@ -11,7 +11,7 @@ arqanore::Vector2 scale;
 
 int frame_hor = 0;
 int frame_vert = 0;
-int frame_time = 0;
+double frame_time = 0;
 int direction = 2;
 
 void on_open(arqanore::Window *window) {
@@ -33,9 +33,15 @@ void on_close(arqanore::Window *window) {
     delete sprite;
 }
 
-void on_tick(arqanore::Window *window, double dt) {
+void on_update(arqanore::Window *window, double dt) {
+    auto speed = dt * 100;
+
+    if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
+        window->close();
+    }
+
     if (frame_time < 16) {
-        frame_time++;
+        frame_time += dt * 100;
     } else {
         frame_time = 0;
         frame_hor++;
@@ -49,10 +55,10 @@ void on_tick(arqanore::Window *window, double dt) {
         frame_hor = direction * 4;
     }
 
-    if (direction == 1) position.y--;
-    if (direction == 0) position.y++;
-    if (direction == 2) position.x++;
-    if (direction == 3) position.x--;
+    if (direction == 1) position.y -= speed;
+    if (direction == 0) position.y += speed;
+    if (direction == 2) position.x += speed;
+    if (direction == 3) position.x -= speed;
 
     if (direction == 2 && position.x >= window->get_width() - 128) {
         direction = 0;
@@ -75,12 +81,6 @@ void on_tick(arqanore::Window *window, double dt) {
     }
 }
 
-void on_update(arqanore::Window *window, double at) {
-    if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
-        window->close();
-    }
-}
-
 void on_render_2d(arqanore::Window *window) {
     try {
         arqanore::Renderer::render_sprite(window, sprite, position, scale, arqanore::Vector2::ZERO, 0, frame_hor, frame_vert, false, false, arqanore::Color::WHITE);
@@ -95,7 +95,6 @@ int main() {
     window.on_open(on_open);
     window.on_close(on_close);
     window.on_update(on_update);
-    window.on_tick(on_tick);
     window.on_render2d(on_render_2d);
     window.open(false, true, true);
 

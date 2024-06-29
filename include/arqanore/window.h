@@ -32,10 +32,6 @@ namespace arqanore {
 
         void (*window_close_cb)(Window *window);
 
-        void (*window_input_cb)(Window *window);
-
-        void (*window_tick_cb)(Window *window, double);
-
         void (*window_update_cb)(Window *window, double);
 
         void (*window_render2d_cb)(Window *window);
@@ -47,10 +43,6 @@ namespace arqanore {
         void (*window_pos_cb)(Window *window, int, int);
 
         void (*window_char_cb)(Window *window, unsigned int);
-
-        //void (*window_opengl_cb)(Window *window, std::string type, std::string severity, std::string message);
-
-        //static void opengl_debug_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char *message, const void *user_param);
 
         static void error_callback(int error_code, const char *error_description);
 
@@ -130,10 +122,6 @@ namespace arqanore {
         void hide();
 
         void on_open(void (*cb)(Window *));
-
-        void on_input(void (*cb)(Window *));
-
-        void on_tick(void (*cb)(Window *, double));
 
         void on_update(void (*cb)(Window *, double));
 

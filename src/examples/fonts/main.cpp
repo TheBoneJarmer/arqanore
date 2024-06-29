@@ -44,10 +44,6 @@ void on_render_2d(arqanore::Window *window) {
     }
 }
 
-void on_opengl(arqanore::Window *window, std::string type, std::string severity, std::string message) {
-    std::cout << "[" << type << "]" << "[" << severity << "] " << message << std::endl;
-}
-
 int main() {
     try {
         auto window = arqanore::Window(1440, 768, "Arqanore");
@@ -55,7 +51,6 @@ int main() {
         window.on_close(on_close);
         window.on_update(on_update);
         window.on_render2d(on_render_2d);
-        //window.on_opengl(on_opengl);
         window.open(false, true, true);
     } catch (arqanore::ArqanoreException &ex) {
         std::cerr << ex.what() << std::endl;

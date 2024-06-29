@@ -12,8 +12,6 @@ arqanore::Model *model;
 arqanore::Font* font;
 arqanore::Vector3 model_rot;
 
-int updates = 0;
-
 void on_open(arqanore::Window *window) {
     window->set_vsync(false);
 
@@ -36,22 +34,13 @@ void on_close(arqanore::Window *window) {
     delete font;
 }
 
-void on_tick(arqanore::Window *window, double dt) {
-    model_rot.y += dt * 10;
-    updates++;
-}
-
-void on_update(arqanore::Window *window, double at) {
+void on_update(arqanore::Window *window, double dt) {
     try {
         if (arqanore::Keyboard::key_pressed(arqanore::Keys::ESCAPE)) {
             window->close();
         }
 
-        if (updates > 0) {
-            std::cout << updates << std::endl;
-        }
-
-        updates = 0;
+        model_rot += dt * 100;
     } catch (arqanore::ArqanoreException &ex) {
         std::cerr << ex.what() << std::endl;
         window->close();
@@ -80,7 +69,6 @@ int main() {
     window.on_open(on_open);
     window.on_close(on_close);
     window.on_update(on_update);
-    window.on_tick(on_tick);
     window.on_render2d(on_render2d);
     window.on_render3d(on_render3d);
     window.open(false, true, true);

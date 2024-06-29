@@ -207,8 +207,6 @@ arqanore::Window::Window() {
     this->fps = 0;
 
     this->window_open_cb = nullptr;
-    this->window_input_cb = nullptr;
-    this->window_tick_cb = nullptr;
     this->window_update_cb = nullptr;
     this->window_render2d_cb = nullptr;
     this->window_render3d_cb = nullptr;
@@ -295,12 +293,9 @@ void arqanore::Window::init(bool fullscreen, bool maximized, bool resizable) {
 }
 
 void arqanore::Window::loop() {
-    double time_step = 1.0 / 60.0;
-    
     double new_time = 0.0;
     double delta_time = 0.0;
-    double last_update = glfwGetTime();
-    double accum = 0.0;
+    double last_time = glfwGetTime();
     
     double fps_count = 0;
     double fps_time = 0;
@@ -316,8 +311,8 @@ void arqanore::Window::loop() {
 
     while (!glfwWindowShouldClose(handle)) {
         new_time = glfwGetTime();
-        delta_time = new_time - last_update;
-        last_update += delta_time;
+        delta_time = new_time - last_time;
+        last_time = new_time;
 
         // Calculate fps
         fps_count++;
@@ -329,23 +324,8 @@ void arqanore::Window::loop() {
             fps_time = new_time;
         }
 
-        if (window_input_cb != nullptr) {
-            window_input_cb(this);
-        }
-
-        // Fixed time step loop
-        accum += delta_time;
-
-        while (accum >= time_step) {
-            if (window_tick_cb != nullptr) {
-                window_tick_cb(this, time_step);
-            }
-
-            accum -= time_step;
-        }
-
         if (window_update_cb != nullptr) {
-            window_update_cb(this, accum / time_step);
+            window_update_cb(this, delta_time);
         }
 
         Keyboard::update();
@@ -391,12 +371,6 @@ void arqanore::Window::on_open(void (*cb)(Window *)) {
     window_open_cb = cb;
 }
 
-
-
-void arqanore::Window::on_tick(void (*cb)(Window *, double)) {
-    window_tick_cb = cb;
-}
-
 void arqanore::Window::on_update(void (*cb)(Window *, double)) {
     window_update_cb = cb;
 }
@@ -423,8 +397,4 @@ void arqanore::Window::on_position(void (*cb)(Window *, int, int)) {
 
 void arqanore::Window::on_char(void (*cb)(Window *, unsigned int)) {
     window_char_cb = cb;
-}
-
-void arqanore::Window::on_input(void (*cb)(Window *)) {
-    window_input_cb = cb;
 }

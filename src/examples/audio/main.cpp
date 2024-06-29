@@ -1,6 +1,5 @@
 #include <arqanore/window.h>
 #include <arqanore/keyboard.h>
-#include <iostream>
 #include "arqanore/sound.h"
 
 arqanore::Sound* sound;
